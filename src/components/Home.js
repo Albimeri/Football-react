@@ -11,7 +11,6 @@ const Home = () => {
   const [myUserInfo, setMyUserInfo] = useState(null);
   const [role, setRole] = useState(Role.Player);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [orders, setOrders] = useState([]);
   const [inPlayers, setInPlayers] = useState([]);
   const { currentUser, logout } = useAuth();
   const histroy = useHistory();
@@ -38,22 +37,14 @@ const Home = () => {
     fetchData();
   }, [myUserInfo]);
 
-  useEffect(() => {
-    if (orders.length === 0) {
-      return;
-    }
+  const deleteInPlayers = () => {
     const batch = db.batch();
-    orders.forEach((item) => {
-      const hours = moment
-        .duration(moment().diff(moment(item.createdAt)))
-        .asHours();
-      if (hours > 5) {
-        const toRemoveOrder = db.collection("orders").doc(item.id);
-        batch.delete(toRemoveOrder);
-      }
+    inPlayers.forEach((item) => {
+      const toRemovePlayer = db.collection("inUsers").doc(item.id);
+      batch.delete(toRemovePlayer);
     });
     batch.commit();
-  }, [orders]);
+  };
 
   const fetchData = async () => {
     if (!myUserInfo) {
@@ -71,23 +62,9 @@ const Home = () => {
         debugger;
         setInPlayers(users);
       });
-    // const unsubscribeOrders = db
-    //   .collection("orders")
-    //   .where("secretId", "==", myUserInfo.secretId)
-    //   .onSnapshot((querySnapshot) => {
-    //     let orders = [];
-    //     querySnapshot.forEach((doc) => {
-    //       if (doc.exists) {
-    //         const order = doc.data();
-    //         orders.push(order);
-    //       }
-    //     });
-    //     setOrders(orders);
-    //   });
-    // return () => {
-    //   unsubscribeOrders();
-    //   unsubscribeUsers();
-    // };
+    return () => {
+      unsubscribeUsers();
+    };
   };
 
   const setMyStatus = (status) => {
@@ -118,18 +95,6 @@ const Home = () => {
     }
   };
 
-  const createOrder = (restaurant, selectedGuests, isPublic, minutes = 15) => {
-    // db.collection("orders")
-    //   .doc(id)
-    //   .set(order)
-    //   .then(() => {
-    //     console.log("Order successfully created!");
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error creating an order: ", error);
-    //   });
-  };
-
   return (
     <>
       <nav
@@ -149,19 +114,6 @@ const Home = () => {
       </nav>
 
       <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        {currentUser.emailVerified && (
-          <>
-            {/* {myUserInfo && (
-              <h1 className="display-4">Welcome {myUserInfo.name}</h1>
-            )} */}
-            {orders.length > 0 && (
-              <p className="lead">
-                You can choose from the list below or you can create a new order
-                yourself
-              </p>
-            )}
-          </>
-        )}
         {!currentUser.emailVerified && (
           <>
             {myUserInfo && (
@@ -216,36 +168,40 @@ const Home = () => {
             Out
           </button>
         </div>
-        <div>
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Player</th>
-                <th scope="col">Role</th>
-                <th scope="col">Status</th>
-                <th scope="col">Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inPlayers.map((player) => (
+        {inPlayers.length > 0 && (
+          <div>
+            <table className="table table-striped">
+              <thead>
                 <tr>
-                  <th scope="row">1</th>
-                  <td>
-                    {player.name} {player.lastName}
-                  </td>
-                  <td>{player.status === Status.IN ? "In" : "Out"}</td>
-                  <td>
-                    {player.role === Role.Player ? "Player" : "Goal Keeper"}
-                  </td>
-                  <td>{player.time}</td>
+                  <th scope="col">No.</th>
+                  <th scope="col">Player</th>
+                  <th scope="col">Role</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Time</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {inPlayers.map((player, index) => (
+                  <tr>
+                    <th scope="row">{index + 1}</th>
+                    <td>
+                      {player.name} {player.lastName}
+                    </td>
+                    <td>{player.status === Status.IN ? "In" : "Out"}</td>
+                    <td>
+                      {player.role === Role.Player ? "Player" : "Goal Keeper"}
+                    </td>
+                    <td>{player.time}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
-
+      {inPlayers.length > 0 && (
+        <button onClick={deleteInPlayers}>Delete in players</button>
+      )}
       {error}
     </>
   );
