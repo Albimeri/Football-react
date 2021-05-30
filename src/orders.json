@@ -1,0 +1,47 @@
+{
+  "order": {
+    "id": "x123x123x123",
+    "createdAt": "2021-03-19T13:35:00.939Z",
+    "endsAt": "2021-03-19T13:50:00.939Z",
+    "author": { "name": "test", "lastName": "test", "id": "x123x123x123" },
+    "isPublic": false,
+    "guests": [
+      {
+        "name": "alb",
+        "lastName": "imeri",
+        "id": "xcv123xcv",
+        "itemsOrdered": [
+          { "title": "Chicken Crunch Sandwich", "price": 2.8 },
+          {
+            "title": "Chicken Fajita",
+            "price": 3.3
+          }
+        ]
+      },
+      {
+        "name": "edon",
+        "lastName": "abdullahu",
+        "id": "1123hah123",
+        "itemsOrdered": []
+      }
+    ],
+    "restaurant": {
+      "id": 1,
+      "name": "Papirun",
+      "menu": [
+        {
+          "title": "Chicken Crunch Sandwich",
+          "price": 2.8
+        },
+        {
+          "title": "Chicken Fajita",
+          "price": 3.3
+        },
+        {
+          "title": "Chicken Crunch Salad",
+          "price": 4.5
+        }
+      ]
+    }
+  }
+}

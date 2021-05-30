@@ -1,0 +1,42 @@
+.card {
+    margin-bottom: 30px;
+}
+
+.btn-white {
+    border: 1px solid #dfd7d7;
+}
+
+.btn {
+    margin-right: 5px
+}
+
+.cursor-pointer {
+    cursor: pointer!important;
+}
+
+.min-width-order {
+    min-width: 300px;
+}
+
+.margin-bottom-container {
+    margin-bottom: 3em;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 992px) {
+    .min-width-order {
+        min-width: 50%!important;
+    }
+}
+
+@media only screen and (min-width: 0px) and (max-width: 768px) {
+    .min-width-order {
+        min-width: 100%;
+    }
+    .container {
+        width: 90%;
+    }
+}
+
+.margin-bottom-container {
+    margin-bottom: 50px;
+}
