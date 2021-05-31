@@ -6,6 +6,7 @@ import firebase from "firebase";
 import moment from "moment";
 import { Status, Role } from "../constants/enums";
 
+
 const Home = () => {
   const [error, setError] = useState("");
   const [myUserInfo, setMyUserInfo] = useState(null);
@@ -95,24 +96,9 @@ const Home = () => {
     }
   };
 
+ 
   return (
     <>
-      <nav
-        className="navbar navbar-expand-md navbar-dark bg-dark  "
-        style={{ height: "60px" }}
-      >
-        <div className="collapse navbar-collapse">
-          <ul className="navbar-nav mr-auto"></ul>
-          <button
-            className="btn btn-outline-danger"
-            type="button"
-            onClick={handleLogOut}
-          >
-            Logout
-          </button>
-        </div>
-      </nav>
-
       <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
         {!currentUser.emailVerified && (
           <>
@@ -203,6 +189,7 @@ const Home = () => {
         <button onClick={deleteInPlayers}>Delete in players</button>
       )}
       {error}
+     
     </>
   );
 };
