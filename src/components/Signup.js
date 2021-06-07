@@ -37,6 +37,8 @@ const Signup = () => {
         id: user.uid,
         secretId: Companies.SOLABORATE,
         email: user.email,
+        ratings: {},
+        canRate: false,
       });
     } catch (err) {
       setError("Failed to create an account");

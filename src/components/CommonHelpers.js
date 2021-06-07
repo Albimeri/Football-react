@@ -18,3 +18,10 @@ export const handleOnKeyDownNumeric = (event) => {
     event.preventDefault();
   }
 };
+
+export const calculateRating = (ratings) => {
+  let sum = 0;
+  const ratingsArr = Object.values(ratings);
+  ratingsArr.forEach((item) => (sum += item));
+  return sum / ratingsArr.length;
+};

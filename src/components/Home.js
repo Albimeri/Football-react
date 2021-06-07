@@ -68,8 +68,7 @@ const Home = () => {
     };
   };
 
-  const setMyStatus = (status) => {
-    debugger;
+  const setMyStatus = (status) => { 
     db.collection("inUsers")
       .doc(myUserInfo.id)
       .set({
