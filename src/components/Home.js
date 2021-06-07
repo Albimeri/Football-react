@@ -5,7 +5,7 @@ import { generateId } from "./CommonHelpers";
 import firebase from "firebase";
 import moment from "moment";
 import { Status, Role } from "../constants/enums";
-
+import Draggable from "react-draggable";
 
 const Home = () => {
   const [error, setError] = useState("");
@@ -38,11 +38,11 @@ const Home = () => {
     fetchData();
   }, [myUserInfo]);
 
-  const deleteInPlayers = () => {
+  const updateInPlayers = () => {
     const batch = db.batch();
     inPlayers.forEach((item) => {
-      const toRemovePlayer = db.collection("inUsers").doc(item.id);
-      batch.delete(toRemovePlayer);
+      const toUpdatePlayer = db.collection("users").doc(item.id);
+      batch.update(toUpdatePlayer, { status: Status.NOT_SET });
     });
     batch.commit();
   };
@@ -52,7 +52,8 @@ const Home = () => {
       return;
     }
     const unsubscribeUsers = db
-      .collection("inUsers")
+      .collection("users")
+      .where("status", "!=", Status.NOT_SET)
       .onSnapshot((querySnapshot) => {
         let users = [];
         querySnapshot.forEach((doc) => {
@@ -60,7 +61,6 @@ const Home = () => {
             users.push(doc.data());
           }
         });
-        debugger;
         setInPlayers(users);
       });
     return () => {
@@ -68,13 +68,12 @@ const Home = () => {
     };
   };
 
-  const setMyStatus = (status) => { 
-    db.collection("inUsers")
+  const setMyStatus = (status) => {
+    db.collection("users")
       .doc(myUserInfo.id)
       .set({
         ...myUserInfo,
         status,
-        role,
         time: moment().format("M/D/yyyy, h:mm:ss SSS"),
       })
       .then(() => {
@@ -95,7 +94,12 @@ const Home = () => {
     }
   };
 
- 
+  const handleStart = () => {};
+  const handleDrag = () => {};
+  const handleStop = (e) => {
+    debugger;
+  };
+
   return (
     <>
       <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
@@ -153,6 +157,25 @@ const Home = () => {
             Out
           </button>
         </div>
+
+        <Draggable
+          axis="x"
+          handle=".handle"
+          defaultPosition={{ x: 0, y: 0 }}
+          position={null}
+          grid={[5, 5]}
+          scale={1}
+          onStart={handleStart}
+          onDrag={handleDrag}
+          onStop={handleStop}
+        >
+          <div>
+            <div className="handle">Drag from here</div>
+            <div>This readme is really dragging on...</div>
+            <p>test</p>
+          </div>
+        </Draggable>
+
         {inPlayers.length > 0 && (
           <div>
             <table className="table table-striped">
@@ -185,10 +208,9 @@ const Home = () => {
         )}
       </div>
       {inPlayers.length > 0 && (
-        <button onClick={deleteInPlayers}>Delete in players</button>
+        <button onClick={updateInPlayers}>Delete in players</button>
       )}
       {error}
-     
     </>
   );
 };

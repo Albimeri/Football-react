@@ -9,8 +9,33 @@ import { Status, Role } from "../constants/enums";
 const Header = () => {
   const histroy = useHistory();
   const { currentUser, logout } = useAuth();
-
   const [error, setError] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const db = firebase.firestore();
+
+  useEffect(() => {
+    fetchAdmins();
+  }, []);
+
+  const fetchAdmins = async () => {
+    const unsubscribeOrders = db
+      .collection("users")
+      .where("isAdmin", "==", true)
+      .onSnapshot((querySnapshot) => {
+        let admins = [];
+        querySnapshot.forEach((doc) => {
+          if (doc.exists) {
+            const admin = doc.data();
+            admins.push(admin);
+          }
+        });
+        setIsAdmin(admins.some((item) => item.id === currentUser.uid));
+      });
+    return () => {
+      unsubscribeOrders();
+    };
+  };
+
   const handleLogOut = async () => {
     setError("");
     try {
@@ -31,9 +56,11 @@ const Header = () => {
       <a className="navbar-brand" onClick={() => histroy.push("/ratings")}>
         Ratings
       </a>
-      <a className="navbar-brand" onClick={() => histroy.push("/admin")}>
-        Admin
-      </a>
+      {isAdmin && (
+        <a className="navbar-brand" onClick={() => histroy.push("/admin")}>
+          Admin
+        </a>
+      )}
       <div className="collapse navbar-collapse">
         <ul className="navbar-nav mr-auto"></ul>
         <button

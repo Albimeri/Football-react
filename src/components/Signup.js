@@ -3,7 +3,7 @@ import { Card, Form, Button, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import { Companies } from "../constants/enums";
+import { Companies, Role, Status } from "../constants/enums";
 import firebase from "firebase";
 
 const Signup = () => {
@@ -39,6 +39,8 @@ const Signup = () => {
         email: user.email,
         ratings: {},
         canRate: false,
+        role: Role.Player,
+        status: Status.NOT_SET,
       });
     } catch (err) {
       setError("Failed to create an account");
