@@ -5,7 +5,7 @@ import { generateId } from "./CommonHelpers";
 import firebase from "firebase";
 import moment from "moment";
 import { Status, Role } from "../constants/enums";
-import Draggable from "react-draggable";
+import { SelectPlayers } from "../components/SelectPlayers";
 
 const Home = () => {
   const [error, setError] = useState("");
@@ -77,10 +77,10 @@ const Home = () => {
         time: moment().format("M/D/yyyy, h:mm:ss SSS"),
       })
       .then(() => {
-        console.log("Order successfully created!");
+        console.log("Status successfully set!");
       })
       .catch((error) => {
-        console.error("Error creating an order: ", error);
+        console.error("Error setting status: ", error);
       });
   };
 
@@ -92,12 +92,6 @@ const Home = () => {
     } catch {
       setError("Failed to logout");
     }
-  };
-
-  const handleStart = () => {};
-  const handleDrag = () => {};
-  const handleStop = (e) => {
-    debugger;
   };
 
   return (
@@ -158,23 +152,28 @@ const Home = () => {
           </button>
         </div>
 
-        <Draggable
-          axis="x"
-          handle=".handle"
-          defaultPosition={{ x: 0, y: 0 }}
-          position={null}
-          grid={[5, 5]}
-          scale={1}
-          onStart={handleStart}
-          onDrag={handleDrag}
-          onStop={handleStop}
-        >
-          <div>
-            <div className="handle">Drag from here</div>
-            <div>This readme is really dragging on...</div>
-            <p>test</p>
-          </div>
-        </Draggable>
+        <SelectPlayers
+          team1={[
+            {
+              id: "tes123",
+              name: "Alb Imeri",
+            },
+            {
+              id: "112",
+              name: "Edon A",
+            },
+          ]}
+          team2={[
+            {
+              id: "11",
+              name: "Kushtrim k",
+            },
+            {
+              id: "te33s123",
+              name: "Orion O",
+            },
+          ]}
+        />
 
         {inPlayers.length > 0 && (
           <div>
