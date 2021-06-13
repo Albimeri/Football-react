@@ -71,8 +71,24 @@ const Home = () => {
         });
         setInPlayers(users);
       });
+    const unsubscribeTeams = db
+      .collection("teams")
+      .onSnapshot((querySnapshot) => {
+        let items = [];
+        querySnapshot.forEach((doc) => {
+          if (doc.exists) {
+            items.push(doc.data());
+          }
+        });
+        const teams = {
+          team1: items.filter((item) => item.team === 1),
+          team2: items.filter((item) => item.team === 2),
+        };
+        setTeams(teams);
+      });
     return () => {
       unsubscribeUsers();
+      unsubscribeTeams();
     };
   };
 
@@ -104,18 +120,22 @@ const Home = () => {
 
   const saveTeams = () => {
     const batch = db.batch();
-    const toSetTeam1 = db.collection("teams").doc(generateId());
-    const toSetTeam2 = db.collection("teams").doc(generateId());
-    batch.set(toSetTeam1, teams.team1);
-    batch.set(toSetTeam2, teams.team2);
+    const list = teams.team1.concat(teams.team2);
+    list.forEach((item) => {
+      const toSetPlayer = db.collection("teams").doc(item.id);
+      batch.set(toSetPlayer, item);
+    });
     batch.commit();
   };
 
   const deleteTeams = () => {
-    setTeams({
-      team1: [],
-      team2: [],
+    const batch = db.batch();
+    const list = teams.team1.concat(teams.team2);
+    list.forEach((item) => {
+      const toDeletePlayer = db.collection("teams").doc(item.id);
+      batch.delete(toDeletePlayer, item);
     });
+    batch.commit();
   };
 
   const initTeams = () => {
@@ -235,13 +255,10 @@ const Home = () => {
     const sourceClone = Array.from(source);
     const destClone = Array.from(destination);
     const [removed] = sourceClone.splice(droppableSource.index, 1);
-
     destClone.splice(droppableDestination.index, 0, removed);
-
     const result = {};
     result[droppableSource.droppableId] = sourceClone;
     result[droppableDestination.droppableId] = destClone;
-
     return result;
   };
 
@@ -251,9 +268,7 @@ const Home = () => {
     userSelect: "none",
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
-
     background: isDragging ? "lightgreen" : "grey",
-
     ...draggableStyle,
   });
 
@@ -265,19 +280,17 @@ const Home = () => {
 
   // Defining unique ID for multiple lists
   const id2List = {
-    droppable: "team1",
-    droppable2: "team2",
+    team1: "team1",
+    team2: "team2",
   };
 
   const getList = (id) => teams[id2List[id]];
 
   const onDragEnd = (result) => {
     const { source, destination } = result;
-
     if (!destination) {
       return;
     }
-    debugger;
     // Sorting in same list
     if (source.droppableId === destination.droppableId) {
       const team1 = reorder(
@@ -287,11 +300,9 @@ const Home = () => {
       );
 
       let state = { team1, team2: teams.team2 };
-
-      if (source.droppableId === "droppable2") {
+      if (source.droppableId === "team2") {
         state = { team2: team1, team1: teams.team1 };
       }
-
       setTeams(state);
     }
     // Interlist movement
@@ -302,10 +313,11 @@ const Home = () => {
         source,
         destination
       );
-      debugger;
+      result.team1.forEach((item) => (item.team = 1));
+      result.team2.forEach((item) => (item.team = 2));
       setTeams({
-        team1: result.droppable,
-        team2: result.droppable2,
+        team1: result.team1,
+        team2: result.team2,
       });
     }
   };
@@ -340,8 +352,8 @@ const Home = () => {
           </>
         )}
         <div>
-          <h2> Next match at (18:00 Tue, 01 Jun)</h2>
-          <h2>Location: Fusha Prishtina</h2>
+          <h2> Next match at (21:00 Wednesday)</h2>
+          <h2>Location: Fusha 2 korriku</h2>
           <h2>What is your status?</h2>
           <h5> Select your role:</h5>
           <select
@@ -370,7 +382,7 @@ const Home = () => {
           <DragDropContext onDragEnd={onDragEnd}>
             <div>
               <h1>Team1</h1>
-              <Droppable droppableId="droppable">
+              <Droppable droppableId="team1">
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -407,7 +419,7 @@ const Home = () => {
             <div>
               {" "}
               <h1>Team2</h1>
-              <Droppable droppableId="droppable2">
+              <Droppable droppableId="team2">
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
