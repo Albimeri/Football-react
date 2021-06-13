@@ -132,21 +132,20 @@ const Home = () => {
         : players.length
     );
     goalKeepers.sort((a, b) => {
-      let average1 = calculateRating(a, getPriviledgedUsers(inPlayers));
-      let average2 = calculateRating(b, getPriviledgedUsers(inPlayers));
+      let average1 = calculateRating(a.ratings);
+      let average2 = calculateRating(b.ratings);
       return average1 < average2 ? 1 : -1;
     });
     goalKeepers.forEach((goalKeeper, index) => {
       let team = (index + 1) % 2 === 0 ? 1 : 2;
-      goalKeeper.Team = team;
+      goalKeeper.team = team;
       team === 1
         ? team1.players.push(goalKeeper)
         : team2.players.push(goalKeeper);
     });
 
     players.sort((a, b) =>
-      calculateRating(a, getPriviledgedUsers(inPlayers)) <
-        calculateRating(b, getPriviledgedUsers(inPlayers)) || +a.Role === 0
+      calculateRating(a.ratings) < calculateRating(b.ratings) || +a.Role === 0
         ? 1
         : -1
     );
@@ -181,37 +180,37 @@ const Home = () => {
     let turnToAdd = 1;
     for (let i = 0; i < players.length; i++) {
       if (turnToAdd === 1) {
-        players[i].Team = 1;
+        players[i].team = 1;
         if (team1.playersToAdd === 2) {
           if (players.length - 1 === i) {
             team1.players.push(players[i]);
           } else {
-            players[i + 1].Team = 1;
+            players[i + 1].team = 1;
             team1.players.push(players[i]);
             team1.players.push(players[i + 1]);
             i++;
           }
           team1.playersToAdd = 1;
         } else {
-          players[i].Team = 1;
+          players[i].team = 1;
           team1.players.push(players[i]);
           team1.playersToAdd = 2;
         }
       }
       if (turnToAdd === 2) {
         if (team2.playersToAdd === 2) {
-          players[i].Team = 2;
+          players[i].team = 2;
           if (players.length - 1 === i) {
             team2.players.push(players[i]);
           } else {
-            players[i + 1].Team = 2;
+            players[i + 1].team = 2;
             team2.players.push(players[i]);
             team2.players.push(players[i + 1]);
             i++;
           }
           team2.playersToAdd = 1;
         } else {
-          players[i].Team = 2;
+          players[i].team = 2;
           team2.players.push(players[i]);
           team2.playersToAdd = 2;
         }
@@ -393,7 +392,8 @@ const Home = () => {
                               provided.draggableProps.style
                             )}
                           >
-                            {item.name}
+                            {item.name} {item.lastName}{" "}
+                            {calculateRating(item.ratings)}
                           </div>
                         )}
                       </Draggable>
@@ -429,7 +429,8 @@ const Home = () => {
                               provided.draggableProps.style
                             )}
                           >
-                            {item.name}
+                            {item.name} {item.lastName}{" "}
+                            {calculateRating(item.ratings)}
                           </div>
                         )}
                       </Draggable>

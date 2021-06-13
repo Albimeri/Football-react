@@ -23,7 +23,7 @@ export const calculateRating = (ratings) => {
   let sum = 0;
   const ratingsArr = Object.values(ratings);
   ratingsArr.forEach((item) => (sum += item));
-  return sum / ratingsArr.length;
+  return ratingsArr.length === 0 ? 'N/A' : sum / ratingsArr.length;
 };
 
 export const getPriviledgedUsers = (users) => {
