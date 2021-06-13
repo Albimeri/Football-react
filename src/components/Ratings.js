@@ -26,7 +26,7 @@ const Ratings = () => {
             data.push(doc.data());
           }
         });
-        debugger;
+
         setUsers(data);
       });
     return () => {
@@ -39,7 +39,6 @@ const Ratings = () => {
   }, []);
 
   const ratingChanged = (user, rating) => {
-    debugger;
     db.collection("users")
       .doc(user.id)
       .update({
@@ -55,7 +54,6 @@ const Ratings = () => {
   };
 
   const toggleCanRate = (user) => {
-    debugger;
     db.collection("users")
       .doc(user.id)
       .update({
@@ -128,6 +126,7 @@ const Ratings = () => {
                   <td>
                     <div className="form-check form-switch">
                       <input
+                        checked={user.canRate}
                         onChange={() => toggleCanRate(user)}
                         className="form-check-input"
                         type="checkbox"
