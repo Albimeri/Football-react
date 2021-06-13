@@ -25,3 +25,7 @@ export const calculateRating = (ratings) => {
   ratingsArr.forEach((item) => (sum += item));
   return sum / ratingsArr.length;
 };
+
+export const getPriviledgedUsers = (users) => {
+  return users.filter((item) => item.canRate);
+};
