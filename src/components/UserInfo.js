@@ -5,8 +5,9 @@ import { generateId } from "./CommonHelpers";
 import { hoursEnum } from "../constants/enums";
 import firebase from "firebase";
 import moment from "moment";
+import { Status, Role, Companies } from "../constants/enums";
 
-const Admin = () => {
+const UserInfo = () => {
   const { currentUser } = useAuth();
   const [myUserInfo, setMyUserInfo] = useState(null);
   const [matchHour, setMatchHour] = useState(21);
@@ -18,67 +19,49 @@ const Admin = () => {
   const [playerName, setPlayerName] = useState("");
   const db = firebase.firestore();
 
-  const updatePlayerNumber = () => {
-    
-  };
-
   // currentUser.uid --- my id
+
+  useEffect(() => {
+    db.collection("users")
+      .doc(currentUser.uid)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          const userInfo = doc.data();
+          setMyUserInfo(userInfo);
+        }
+      })
+      .catch((error) => {
+        console.log("Error getting document:", error);
+      });
+  }, [currentUser.uid]);
+
+  //   useEffect(() => {
+  //     updateRole(role);
+  //   }, [role]);
+
+  const updateRole = (role) => {
+    db.collection("users")
+      .doc(currentUser.uid)
+      .set({
+        ...myUserInfo,
+        role,
+      })
+      .then(() => {
+        console.log("Role successfully set!");
+      })
+      .catch((error) => {
+        console.error("Error setting role: ", error);
+      });
+  };
 
   return (
     <>
-      <section className="jumbotron">
-        <h1>Match info</h1>
-        <div>
-          <span>Match hour</span>
-          <select
-            onChange={(event) => {
-              setMatchHour(+event.target.value);
-            }}
-          >
-            {hoursEnum.map((hour) => (
-              <option value={hour.key}>{hour.description}</option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <span>Match day</span>
-          <select
-            onChange={(event) => {
-              setMatchDay(+event.target.value);
-            }}
-          >
-            {hoursEnum.map((hour) => (
-              <option value={hour.key}>{hour.description}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <span>Match filed</span>
-          <select
-            onChange={(event) => {
-              setMatchFiled(+event.target.value);
-            }}
-          >
-            {hoursEnum.map((hour) => (
-              <option value={hour.key}>{hour.description}</option>
-            ))}
-          </select>
-        </div>
-        <div>
-          <span>Match players</span>
-          <select
-            onChange={(event) => {
-              matchPlayers(+event.target.value);
-            }}
-          >
-            {hoursEnum.map((hour) => (
-              <option value={hour.key}>{hour.description}</option>
-            ))}
-          </select>
-        </div>
-      </section>
-
+      {myUserInfo && (
+        <h1>
+          Welcome {myUserInfo.name} {myUserInfo.lastName}
+        </h1>
+      )}
       <section className="jumbotron">
         <h1>Add players</h1>
 
@@ -89,6 +72,18 @@ const Admin = () => {
             value={playerName}
           />
         </div>
+
+        <h5> Select your role:</h5>
+        <select
+          onChange={(event) => {
+            debugger;
+            setRole(+event.target.value);
+          }}
+        >
+          <option value={Role.Player}>Player</option>
+          <option value={Role.GoalKeeper}>Goal Keeper</option>
+        </select>
+
         <div>
           <span>Role</span>
           <select
@@ -119,4 +114,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default UserInfo;

@@ -53,6 +53,9 @@ const Header = () => {
       <a className="navbar-brand" onClick={() => histroy.push("/")}>
         Home
       </a>
+      {/* <a className="navbar-brand" onClick={() => histroy.push("/user-info")}>
+       User Info
+      </a> */}
       <a className="navbar-brand" onClick={() => histroy.push("/ratings")}>
         Ratings
       </a>

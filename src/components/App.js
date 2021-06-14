@@ -3,6 +3,7 @@ import Home from "./Home";
 import Ratings from "./Ratings";
 import Admin from "./Admin";
 import Login from "./Login";
+import UserInfo from "./UserInfo";
 import PrivateRoute from "./PrivateRoute";
 import ForgotPassword from "./ForgotPassword";
 import { AuthProvider } from "../contexts/AuthContext";
@@ -19,6 +20,7 @@ const App = () => {
           <Switch>
             <PrivateRoute exact path="/" component={Home} />
             <PrivateRoute exact path="/ratings" component={Ratings} />
+            <PrivateRoute exact path="/user-info" component={UserInfo} />
             <PrivateRoute exact path="/admin" component={Admin} />
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />

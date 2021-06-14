@@ -8,15 +8,17 @@ import {
 } from "./CommonHelpers";
 import firebase from "firebase";
 import moment from "moment";
-import { Status, Role } from "../constants/enums";
+import { Status, Role, Companies } from "../constants/enums";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-const Home = () => {
+const Home = (props) => {
   const [error, setError] = useState("");
   const [myUserInfo, setMyUserInfo] = useState(null);
   const [role, setRole] = useState(Role.Player);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [inPlayers, setInPlayers] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [isAdmin, setIsAdmin] = useState([]);
   const [teams, setTeams] = useState({
     team1: [],
     team2: [],
@@ -26,25 +28,8 @@ const Home = () => {
   const db = firebase.firestore();
 
   useEffect(() => {
-    db.collection("users")
-      .doc(currentUser.uid)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const userInfo = doc.data();
-          setMyUserInfo(userInfo);
-        } else {
-          handleLogOut();
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting document:", error);
-      });
-  }, [currentUser.uid]);
-
-  useEffect(() => {
     fetchData();
-  }, [myUserInfo]);
+  }, []);
 
   const updateInPlayers = () => {
     const batch = db.batch();
@@ -53,23 +38,27 @@ const Home = () => {
       batch.update(toUpdatePlayer, { status: Status.NOT_SET });
     });
     batch.commit();
+    deleteTeams();
   };
 
   const fetchData = async () => {
-    if (!myUserInfo) {
-      return;
-    }
     const unsubscribeUsers = db
       .collection("users")
-      .where("status", "!=", Status.NOT_SET)
+      .where("secretId", "==", Companies.SOLABORATE)
       .onSnapshot((querySnapshot) => {
         let users = [];
         querySnapshot.forEach((doc) => {
           if (doc.exists) {
+            debugger;
+            const user = doc.data();
+            if (user.id === currentUser.uid) {
+              setMyUserInfo(user);
+            }
             users.push(doc.data());
           }
         });
-        setInPlayers(users);
+        setInPlayers(users.filter((item) => item.status !== Status.NOT_SET));
+        setUsers(users);
       });
     const unsubscribeTeams = db
       .collection("teams")
@@ -86,36 +75,24 @@ const Home = () => {
         };
         setTeams(teams);
       });
+    const unsubscribeAdmins = db
+      .collection("users")
+      .where("isAdmin", "==", true)
+      .onSnapshot((querySnapshot) => {
+        let admins = [];
+        querySnapshot.forEach((doc) => {
+          if (doc.exists) {
+            const admin = doc.data();
+            admins.push(admin);
+          }
+        });
+        setIsAdmin(admins.some((item) => item.id === currentUser.uid));
+      });
     return () => {
       unsubscribeUsers();
       unsubscribeTeams();
+      unsubscribeAdmins();
     };
-  };
-
-  const setMyStatus = (status) => {
-    db.collection("users")
-      .doc(myUserInfo.id)
-      .set({
-        ...myUserInfo,
-        status,
-        time: moment().format("M/D/yyyy, h:mm:ss SSS"),
-      })
-      .then(() => {
-        console.log("Status successfully set!");
-      })
-      .catch((error) => {
-        console.error("Error setting status: ", error);
-      });
-  };
-
-  const handleLogOut = async () => {
-    setError("");
-    try {
-      await logout();
-      histroy.push("/");
-    } catch {
-      setError("Failed to logout");
-    }
   };
 
   const saveTeams = () => {
@@ -136,6 +113,7 @@ const Home = () => {
       batch.delete(toDeletePlayer, item);
     });
     batch.commit();
+    setTeams({ team1: [], team2: [] });
   };
 
   const initTeams = () => {
@@ -152,8 +130,8 @@ const Home = () => {
         : players.length
     );
     goalKeepers.sort((a, b) => {
-      let average1 = calculateRating(a.ratings);
-      let average2 = calculateRating(b.ratings);
+      let average1 = calculateRating(a.ratings, users);
+      let average2 = calculateRating(b.ratings, users);
       return average1 < average2 ? 1 : -1;
     });
     goalKeepers.forEach((goalKeeper, index) => {
@@ -180,7 +158,7 @@ const Home = () => {
       (player) => player.canRate || player.isGuest
     );
     priviledgedPlayers.forEach((player) => {
-      let ratingAvg = calculateRating(player.ratings);
+      let ratingAvg = calculateRating(player.ratings, users);
       sum += ratingAvg;
     });
     return sum / priviledgedPlayers.length;
@@ -322,6 +300,22 @@ const Home = () => {
     }
   };
 
+  const setMyStatus = (status) => {
+    db.collection("users")
+      .doc(myUserInfo.id)
+      .set({
+        ...myUserInfo,
+        status,
+        time: moment().format("M/D/yyyy, h:mm:ss SSS"),
+      })
+      .then(() => {
+        console.log("Status successfully set!");
+      })
+      .catch((error) => {
+        console.error("Error setting status: ", error);
+      });
+  };
+
   return (
     <>
       <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
@@ -351,172 +345,207 @@ const Home = () => {
             )}
           </>
         )}
-        <div>
-          <h2> Next match at (21:00 Wednesday)</h2>
-          <h2>Location: Fusha 2 korriku</h2>
-          <h2>What is your status?</h2>
-          <h5> Select your role:</h5>
-          <select
-            onChange={(event) => {
-              debugger;
-              setRole(+event.target.value);
-            }}
-          >
-            <option value={Role.Player}>Player</option>
-            <option value={Role.GoalKeeper}>Goal Keeper</option>
-          </select>
-          <button
-            className="btn btn btn-outline-success"
-            onClick={() => setMyStatus(Status.IN)}
-          >
-            IN
-          </button>
-          <button
-            className="btn btn btn-outline-danger"
-            onClick={() => setMyStatus(Status.OUT)}
-          >
-            Out
-          </button>
-        </div>
-        <div style={{ display: "flex" }}>
-          <DragDropContext onDragEnd={onDragEnd}>
-            <div>
-              <h1>Team1</h1>
-              <Droppable droppableId="team1">
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
-                  >
-                    {teams.team1.map((item, index) => (
-                      <Draggable
-                        key={item.id}
-                        draggableId={item.id}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getItemStyle(
-                              snapshot.isDragging,
-                              provided.draggableProps.style
-                            )}
-                          >
-                            {item.name} {item.lastName}{" "}
-                            {calculateRating(item.ratings)}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-
-            <div>
-              {" "}
-              <h1>Team2</h1>
-              <Droppable droppableId="team2">
-                {(provided, snapshot) => (
-                  <div
-                    ref={provided.innerRef}
-                    style={getListStyle(snapshot.isDraggingOver)}
-                  >
-                    {teams.team2.map((item, index) => (
-                      <Draggable
-                        key={item.id}
-                        draggableId={item.id}
-                        index={index}
-                      >
-                        {(provided, snapshot) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            style={getItemStyle(
-                              snapshot.isDragging,
-                              provided.draggableProps.style
-                            )}
-                          >
-                            {item.name} {item.lastName}{" "}
-                            {calculateRating(item.ratings)}
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </div>
-          </DragDropContext>
-        </div>
-        {inPlayers.length > 0 && (
-          <div>
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">No.</th>
-                  <th scope="col">Player</th>
-                  <th scope="col">Role</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {inPlayers.map((player, index) => (
-                  <tr>
-                    <th scope="row">{index + 1}</th>
-                    <td>
-                      {player.name} {player.lastName}
-                    </td>
-                    <td>{player.status === Status.IN ? "In" : "Out"}</td>
-                    <td>
-                      {player.role === Role.Player ? "Player" : "Goal Keeper"}
-                    </td>
-                    <td>{player.time}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-        {inPlayers.length > 0 && (
-          <div>
-            <button
-              className="btn btn btn-danger"
-              type="button"
-              onClick={updateInPlayers}
-            >
-              Delete in players
-            </button>
-            <button
-              className="btn btn btn-default"
-              type="button"
-              onClick={initTeams}
-            >
-              Init Teams
-            </button>
-            <button
-              className="btn btn btn-danger"
-              type="button"
-              onClick={deleteTeams}
-            >
-              Delete Teams
-            </button>
-            <button
-              className="btn btn btn-success"
-              type="button"
-              onClick={saveTeams}
-            >
-              Save Teams
-            </button>
-          </div>
-        )}
       </div>
+      {currentUser.emailVerified && (
+        <>
+          <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            <h2> Next match at (21:00 Wednesday)</h2>
+            <h2>Location: Fusha 2 korriku</h2>
+            <h2>What is your status?</h2>
+            <h5> Select your role:</h5>
+            <select
+              onChange={(event) => {
+                debugger;
+                setRole(+event.target.value);
+              }}
+            >
+              <option value={Role.Player}>Player</option>
+              <option value={Role.GoalKeeper}>Goal Keeper</option>
+            </select>
+            <button
+              className="btn btn btn-outline-success"
+              onClick={() => setMyStatus(Status.IN)}
+            >
+              IN
+            </button>
+            <button
+              className="btn btn btn-outline-danger"
+              onClick={() => setMyStatus(Status.OUT)}
+            >
+              Out
+            </button>
+          </div>
+
+          {!isAdmin && (
+            <div className="col-lg-6 mx-auto">
+              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <div>
+                  <h3>Team white</h3>
+                  {teams.team1.map((item) => (
+                    <p>
+                      {item.name} {item.lastName}
+                    </p>
+                  ))}
+                </div>
+                <div>
+                  <h3>Team black</h3>
+                  {teams.team2.map((item) => (
+                    <p>
+                      {item.name} {item.lastName}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {isAdmin && (teams.team1.length > 0 || teams.team2.length > 0) && (
+            <div className="col-lg-6 mx-auto">
+              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <div style={{ display: "flex" }}>
+                  <DragDropContext onDragEnd={onDragEnd}>
+                    <div>
+                      <h1>Team white</h1>
+                      <Droppable droppableId="team1">
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            style={getListStyle(snapshot.isDraggingOver)}
+                          >
+                            {teams.team1.map((item, index) => (
+                              <Draggable
+                                key={item.id}
+                                draggableId={item.id}
+                                index={index}
+                              >
+                                {(provided, snapshot) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={getItemStyle(
+                                      snapshot.isDragging,
+                                      provided.draggableProps.style
+                                    )}
+                                  >
+                                    {item.name} {item.lastName}{" "}
+                                    {calculateRating(item.ratings, users)}
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
+
+                    <div>
+                      <h1>Team black</h1>
+                      <Droppable droppableId="team2">
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            style={getListStyle(snapshot.isDraggingOver)}
+                          >
+                            {teams.team2.map((item, index) => (
+                              <Draggable
+                                key={item.id}
+                                draggableId={item.id}
+                                index={index}
+                              >
+                                {(provided, snapshot) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    style={getItemStyle(
+                                      snapshot.isDragging,
+                                      provided.draggableProps.style
+                                    )}
+                                  >
+                                    {item.name} {item.lastName}{" "}
+                                    {calculateRating(item.ratings, users)}
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </div>
+                  </DragDropContext>
+                </div>
+              </div>
+            </div>
+          )}
+          {inPlayers.length > 0 && (
+            <div class="table-responsive">
+              <table class="table table-striped table-sm">
+                <thead>
+                  <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">Player</th>
+                    <th scope="col">Role</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {inPlayers.map((player, index) => (
+                    <tr>
+                      <th scope="row">{index + 1}</th>
+                      <td>
+                        {player.name} {player.lastName}
+                      </td>
+                      <td>{player.status === Status.IN ? "In" : "Out"}</td>
+                      <td>
+                        {player.role === Role.Player ? "Player" : "Goal Keeper"}
+                      </td>
+                      <td>{player.time}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            {inPlayers.length > 0 && (
+              <div>
+                <button
+                  className="btn btn btn-danger"
+                  type="button"
+                  onClick={updateInPlayers}
+                >
+                  Delete in players
+                </button>
+                <button
+                  className="btn btn btn-default"
+                  type="button"
+                  onClick={initTeams}
+                >
+                  Init Teams
+                </button>
+                <button
+                  className="btn btn btn-danger"
+                  type="button"
+                  onClick={deleteTeams}
+                >
+                  Delete Teams
+                </button>
+                <button
+                  className="btn btn btn-success"
+                  type="button"
+                  onClick={saveTeams}
+                >
+                  Save Teams
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
       {error}
     </>

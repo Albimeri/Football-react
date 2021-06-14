@@ -41,6 +41,7 @@ const Signup = () => {
         canRate: false,
         role: Role.Player,
         status: Status.NOT_SET,
+        isAdmin: false,
       });
     } catch (err) {
       setError("Failed to create an account");
