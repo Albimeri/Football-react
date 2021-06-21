@@ -78,8 +78,8 @@ const Ratings = () => {
   return (
     <>
       {users.length > 0 && (
-        <div>
-          <table className="table table-striped">
+        <div className="container">
+          <table className="table table-striped ratings-table">
             <thead>
               <tr>
                 <th scope="col">No.</th>
@@ -100,27 +100,34 @@ const Ratings = () => {
                   <td>
                     {user.role === Role.Player ? "Player" : "Goal Keeper"}
                   </td>
-                  <td>
+                  <td className="rating-stars" style={{minWidth: "250px"}}>
                     {user.id !== currentUser.uid && user.canRate && (
                       <ReactStars
                         count={10}
                         onChange={(rating) => ratingChanged(user, rating)}
-                        size={24}
-                        activeColor="#ffd700"
+                        size={window.innerWidth < 992 ? 30 : 24}
+                        activeColor="#F7C563"
+                        color="#dee2e6"
                         isHalf={true}
                         value={getMyRating(user.ratings)}
                       />
                     )}
-                    {user.id !== currentUser.uid &&
-                      !user.canRate &&
-                      "This user can not be rated yet!"}
-                    {user.id === currentUser.uid && "You cannot rate yourself!"}
+                    {user.id !== currentUser.uid && !user.canRate && (
+                      <span style={{ color: "red" }}>
+                        This user can not be rated yet!
+                      </span>
+                    )}
+                    {user.id === currentUser.uid && (
+                      <span style={{ color: "red" }}>
+                        You cannot rate yourself!
+                      </span>
+                    )}
                   </td>
                   <td>
                     {user.canRate &&
-                      `${calculateRating(user.ratings)} Rated by ${
+                      `${calculateRating(user.ratings)} (${
                         Object.keys(user.ratings).length
-                      }`}
+                      })`}
                     {!user.canRate && "N/A"}
                   </td>
                   <td>

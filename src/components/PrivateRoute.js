@@ -12,7 +12,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
         return currentUser ? (
           <>
             <Header />
-            <Component {...props} />
+            <main>
+              <Component {...props} />
+            </main>
           </>
         ) : (
           <Redirect to="/login" />

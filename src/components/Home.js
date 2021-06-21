@@ -49,7 +49,6 @@ const Home = (props) => {
         let users = [];
         querySnapshot.forEach((doc) => {
           if (doc.exists) {
-            debugger;
             const user = doc.data();
             if (user.id === currentUser.uid) {
               setMyUserInfo(user);
@@ -149,7 +148,6 @@ const Home = (props) => {
     );
     const { team1, team2 } = seperatePlayers(players);
     setTeams({ team1, team2 });
-    debugger;
   };
 
   const getTeamAverage = (team, users) => {
@@ -246,14 +244,15 @@ const Home = (props) => {
     userSelect: "none",
     padding: grid * 2,
     margin: `0 0 ${grid}px 0`,
-    background: isDragging ? "lightgreen" : "grey",
+    background: "white",
     ...draggableStyle,
   });
 
   const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? "lightblue" : "lightgrey",
+    background: isDraggingOver ? "lightblue" : "#ededed",
     padding: grid,
     width: 250,
+    minHeight: 94,
   });
 
   // Defining unique ID for multiple lists
@@ -317,9 +316,9 @@ const Home = (props) => {
   };
 
   return (
-    <>
-      <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        {!currentUser.emailVerified && (
+    <div className="container">
+      {!currentUser.emailVerified && (
+        <div className="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
           <>
             {myUserInfo && (
               <h1 className="display-4">Welcome {myUserInfo.name}</h1>
@@ -344,56 +343,91 @@ const Home = (props) => {
               </>
             )}
           </>
-        )}
-      </div>
+        </div>
+      )}
       {currentUser.emailVerified && (
         <>
-          <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+          <div className="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
             <h2> Next match at (21:00 Wednesday)</h2>
-            <h2>Location: Fusha 2 korriku</h2>
-            <h2>What is your status?</h2>
+            <h3>Location: Fusha 2 Korriku</h3>
+            <h4>What is your status?</h4>
             <h5> Select your role:</h5>
             <select
               onChange={(event) => {
-                debugger;
                 setRole(+event.target.value);
               }}
             >
               <option value={Role.Player}>Player</option>
               <option value={Role.GoalKeeper}>Goal Keeper</option>
             </select>
-            <button
-              className="btn btn btn-outline-success"
-              onClick={() => setMyStatus(Status.IN)}
-            >
-              IN
-            </button>
-            <button
-              className="btn btn btn-outline-danger"
-              onClick={() => setMyStatus(Status.OUT)}
-            >
-              Out
-            </button>
+            <div>
+              <button
+                className="btn btn btn-outline-success"
+                onClick={() => setMyStatus(Status.IN)}
+              >
+                IN
+              </button>
+              <button
+                className="btn btn btn-outline-danger"
+                onClick={() => setMyStatus(Status.OUT)}
+              >
+                Out
+              </button>
+            </div>
           </div>
 
           {!isAdmin && (
             <div className="col-lg-6 mx-auto">
-              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <div class="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center not-admin-teams">
                 <div>
                   <h3>Team white</h3>
-                  {teams.team1.map((item) => (
-                    <p>
-                      {item.name} {item.lastName}
-                    </p>
-                  ))}
+                  <div
+                    style={{
+                      background: "rgb(237, 237, 237)",
+                      padding: "10px",
+                      width: "250px",
+                      minHeight: "94px",
+                    }}
+                  >
+                    {teams.team1.map((item) => (
+                      <div
+                        style={{
+                          userSelect: "none",
+                          padding: "20px",
+                          margin: "0px 0px 10px",
+                          background: "white",
+                        }}
+                      >
+                        {item.name} {item.lastName}{" "}
+                        {calculateRating(item.ratings, users)}
+                      </div>
+                    ))}
+                  </div>
                 </div>
                 <div>
-                  <h3>Team black</h3>
-                  {teams.team2.map((item) => (
-                    <p>
-                      {item.name} {item.lastName}
-                    </p>
-                  ))}
+                  <h3>Team Black</h3>
+                  <div
+                    style={{
+                      background: "rgb(237, 237, 237)",
+                      padding: "10px",
+                      width: "250px",
+                      minHeight: "94px",
+                    }}
+                  >
+                    {teams.team2.map((item) => (
+                      <div
+                        style={{
+                          userSelect: "none",
+                          padding: "20px",
+                          margin: "0px 0px 10px",
+                          background: "white",
+                        }}
+                      >
+                        {item.name} {item.lastName}{" "}
+                        {calculateRating(item.ratings, users)}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
@@ -401,11 +435,11 @@ const Home = (props) => {
 
           {isAdmin && (teams.team1.length > 0 || teams.team2.length > 0) && (
             <div className="col-lg-6 mx-auto">
-              <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+              <div class="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center admin-teams">
                 <div style={{ display: "flex" }}>
                   <DragDropContext onDragEnd={onDragEnd}>
                     <div>
-                      <h1>Team white</h1>
+                      <h3>Team White</h3>
                       <Droppable droppableId="team1">
                         {(provided, snapshot) => (
                           <div
@@ -441,7 +475,7 @@ const Home = (props) => {
                     </div>
 
                     <div>
-                      <h1>Team black</h1>
+                      <h3>Team Black</h3>
                       <Droppable droppableId="team2">
                         {(provided, snapshot) => (
                           <div
@@ -482,7 +516,7 @@ const Home = (props) => {
           )}
           {inPlayers.length > 0 && (
             <div class="table-responsive">
-              <table class="table table-striped table-sm">
+              <table class="table table-striped table-sm home-table">
                 <thead>
                   <tr>
                     <th scope="col">No.</th>
@@ -499,9 +533,9 @@ const Home = (props) => {
                       <td>
                         {player.name} {player.lastName}
                       </td>
-                      <td>{player.status === Status.IN ? "In" : "Out"}</td>
+                      <td>{player.status === Status.IN ? "IN" : "OUT"}</td>
                       <td>
-                        {player.role === Role.Player ? "Player" : "Goal Keeper"}
+                        {player.role === Role.Player ? "Player" : "Goalkeeper"}
                       </td>
                       <td>{player.time}</td>
                     </tr>
@@ -518,7 +552,7 @@ const Home = (props) => {
                   type="button"
                   onClick={updateInPlayers}
                 >
-                  Delete in players
+                  Delete IN Players
                 </button>
                 <button
                   className="btn btn btn-default"
@@ -548,7 +582,7 @@ const Home = (props) => {
       )}
 
       {error}
-    </>
+    </div>
   );
 };
 

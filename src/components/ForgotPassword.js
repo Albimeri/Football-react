@@ -31,20 +31,26 @@ const ForgotPassword = () => {
           <h2 className="text-center mb-4">Password Reset</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           {message && <Alert variant="success">{message}</Alert>}
-          <Form>
-            <Form.Group id="email">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="email" required ref={emailRef}></Form.Control>
-            </Form.Group>
-            <Button
-              disabled={isLoading}
-              className="w-100"
-              type="submit"
-              onClick={handleSubmit}
-            >
-              Reset Password
-            </Button>
-          </Form>
+          <div className="container">
+            <Form>
+              <Form.Group id="email">
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type="email"
+                  required
+                  ref={emailRef}
+                ></Form.Control>
+              </Form.Group>
+              <Button
+                disabled={isLoading}
+                className="w-100"
+                type="submit"
+                onClick={handleSubmit}
+              >
+                Reset Password
+              </Button>
+            </Form>
+          </div>
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-3">

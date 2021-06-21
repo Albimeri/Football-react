@@ -1,42 +1,277 @@
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.navbar .container {
+  justify-content: flex-start;
+}
+
+.navbar .container > button {
+  margin-left: auto;
+}
+
+a {
+  cursor: pointer;
+}
+
 .card {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .btn-white {
-    border: 1px solid #dfd7d7;
+  border: 1px solid #dfd7d7;
 }
 
 .btn {
-    margin-right: 5px
+  margin-right: 5px;
 }
 
 .cursor-pointer {
-    cursor: pointer!important;
+  cursor: pointer !important;
 }
 
 .min-width-order {
-    min-width: 300px;
+  min-width: 300px;
 }
 
 .margin-bottom-container {
-    margin-bottom: 3em;
+  margin-bottom: 3em;
+}
+
+input:focus,
+button:focus,
+select:focus {
+  outline: none;
+}
+
+input {
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 5px 15px;
+}
+
+select {
+  display: block;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background: transparent;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M7.41 7.84L12 12.42l4.59-4.58L18 9.25l-6 6-6-6z"/></svg>');
+  background-repeat: no-repeat;
+  background-position-x: calc(100% - 5px);
+  background-position-y: 8px;
+  background-size: 20px;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 5px 15px;
+  padding-right: 30px;
+}
+
+.pricing-header select {
+  margin: 15px auto;
+}
+
+.table td,
+.table th {
+  min-width: 100px;
+}
+
+.btn-default {
+  border: 1px solid #000;
+}
+
+.btn:focus {
+  box-shadow: none !important;
+}
+
+main {
+  height: calc(100vh - 115px);
+  overflow: auto;
+  padding: 30px 0;
+}
+
+.flex {
+  display: flex;
+}
+
+.admin-section > div {
+  flex: 1;
+}
+
+.admin-section select,
+.admin-section input {
+  display: block;
+  margin-top: 7px;
+  width: calc(100% - 7px);
+}
+
+.navbar-brand.active,
+.navbar-brand.active:hover {
+  color: #007bff;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
-    .min-width-order {
-        min-width: 50%!important;
-    }
+  .min-width-order {
+    min-width: 50% !important;
+  }
 }
 
 @media only screen and (min-width: 0px) and (max-width: 768px) {
-    .min-width-order {
-        min-width: 100%;
-    }
-    .container {
-        width: 90%;
-    }
+  .min-width-order {
+    min-width: 100%;
+  }
+  .container {
+    width: 90%;
+  }
 }
 
 .margin-bottom-container {
-    margin-bottom: 50px;
+  margin-bottom: 50px;
+}
+
+/*
+      Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
+      */
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  /* Force table to not be like tables anymore */
+  table,
+  thead,
+  tbody,
+  th,
+  td,
+  tr {
+    display: block;
+  }
+
+  /* Hide table headers (but not display: none;, for accessibility) */
+  thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  tr {
+    margin: 0 0 1rem 0;
+  }
+
+  tr:nth-child(odd) {
+    background: #ccc;
+  }
+
+  td,
+  tbody th {
+    /* Behave  like a "row" */
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    padding-left: 50% !important;
+  }
+
+  td:before,
+  tbody th:before {
+    /* Now like a table header */
+    position: absolute;
+    /* Top/left values mimic padding */
+    top: 50%;
+    left: 30%;
+    transform: translate(-50%, -10px);
+    width: 45%;
+    padding-right: 10px;
+    white-space: nowrap;
+  }
+
+  /*
+          Label the data
+      You could also use a data-* attribute and content for this. That way "bloats" the HTML, this way means you need to keep HTML and CSS in sync. Lea Verou has a clever way to handle with text-shadow.
+          */
+  table.ratings-table tbody th:nth-of-type(1):before {
+    content: "No.";
+  }
+  table.ratings-table td:nth-of-type(1):before {
+    content: "Player";
+  }
+  table.ratings-table td:nth-of-type(2):before {
+    content: "Role";
+  }
+  table.ratings-table td:nth-of-type(3):before {
+    content: "Rate";
+  }
+  table.ratings-table td:nth-of-type(4):before {
+    content: "Rating";
+  }
+  table.ratings-table td:nth-of-type(5):before {
+    content: "Can Rate";
+  }
+
+  table.ratings-table .form-check-input {
+    position: relative;
+  }
+
+  table.home-table tbody th:nth-of-type(1):before {
+    content: "No.";
+  }
+  table.home-table td:nth-of-type(1):before {
+    content: "Player";
+  }
+  table.home-table td:nth-of-type(2):before {
+    content: "Role";
+  }
+  table.home-table td:nth-of-type(3):before {
+    content: "Status";
+  }
+  table.home-table td:nth-of-type(4):before {
+    content: "Time";
+  }
+
+  .admin-teams > div,
+  .not-admin-teams > div {
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .admin-teams > div > div,
+  .not-admin-teams > div > div {
+    flex-basis: 100%;
+    width: 100% !important;
+    margin-bottom: 15px;
+  }
+
+  .admin-teams > div > div > div,
+  .not-admin-teams > div > div > div {
+    width: 100% !important;
+  }
+
+  .pricing-header .btn {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .admin-section {
+    flex-wrap: wrap;
+  }
+
+  .admin-section > div {
+    flex-basis: 100%;
+    margin-bottom: 15px;
+  }
+
+  .admin-section-wrapper:last-of-type {
+    margin-top: 30px;
+  }
 }
