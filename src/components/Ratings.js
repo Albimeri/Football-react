@@ -118,7 +118,7 @@ const Ratings = () => {
                         value={getMyRating(user.ratings)}
                       />
                     )}
-                    {user.id !== currentUser.uid && !user.canRate && (
+                    {!user.canRate && (
                       <span style={{ color: "red" }}>
                         This user can not be rated yet!
                       </span>
