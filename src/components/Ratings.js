@@ -24,9 +24,15 @@ const Ratings = () => {
         querySnapshot.forEach((doc) => {
           if (doc.exists) {
             data.push(doc.data());
+            if (doc.data().id === currentUser.uid) {
+              setMyUserInfo(doc.data());
+            }
           }
         });
-
+        data.sort(
+          (a, b) =>
+            calculateRating(b.ratings, data) - calculateRating(a.ratings, data)
+        );
         setUsers(data);
       });
     return () => {
@@ -100,8 +106,8 @@ const Ratings = () => {
                   <td>
                     {user.role === Role.Player ? "Player" : "Goal Keeper"}
                   </td>
-                  <td className="rating-stars" style={{minWidth: "250px"}}>
-                    {user.id !== currentUser.uid && user.canRate && (
+                  <td className="rating-stars" style={{ minWidth: "250px" }}>
+                    {user.id !== currentUser.uid && myUserInfo.canRate && (
                       <ReactStars
                         count={10}
                         onChange={(rating) => ratingChanged(user, rating)}
@@ -125,21 +131,25 @@ const Ratings = () => {
                   </td>
                   <td>
                     {user.canRate &&
-                      `${calculateRating(user.ratings)} (${
+                      `${calculateRating(user.ratings, users)} (Rated by ${
                         Object.keys(user.ratings).length
                       })`}
                     {!user.canRate && "N/A"}
                   </td>
+
                   <td>
-                    <div className="form-check form-switch">
-                      <input
-                        checked={user.canRate}
-                        onChange={() => toggleCanRate(user)}
-                        className="form-check-input"
-                        type="checkbox"
-                        id="flexSwitchCheckDefault"
-                      />
-                    </div>
+                    {myUserInfo.isAdmin && (
+                      <div className="form-check form-switch">
+                        <input
+                          checked={user.canRate}
+                          onChange={() => toggleCanRate(user)}
+                          className="form-check-input"
+                          type="checkbox"
+                          id="flexSwitchCheckDefault"
+                        />
+                      </div>
+                    )}
+                    {!user.canRate && !myUserInfo.isAdmin && "Cannot rate yet!"}
                   </td>
                 </tr>
               ))}

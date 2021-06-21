@@ -56,7 +56,9 @@ const Home = (props) => {
             users.push(doc.data());
           }
         });
-        setInPlayers(users.filter((item) => item.status !== Status.NOT_SET));
+        const filtered = users.filter((item) => item.status !== Status.NOT_SET);
+        filtered.sort((a, b) => moment(a.time) - moment(b.time));
+        setInPlayers(filtered);
         setUsers(users);
       });
     const unsubscribeTeams = db
@@ -142,7 +144,8 @@ const Home = (props) => {
     });
 
     players.sort((a, b) =>
-      calculateRating(a.ratings) < calculateRating(b.ratings) || +a.Role === 0
+      calculateRating(a.ratings, users) < calculateRating(b.ratings, users) ||
+      +a.Role === 0
         ? 1
         : -1
     );
@@ -376,7 +379,7 @@ const Home = (props) => {
             </div>
           </div>
 
-          {!isAdmin && (
+          {!isAdmin && (teams.team1.length > 0 || teams.team2.length > 0) && (
             <div className="col-lg-6 mx-auto">
               <div class="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center not-admin-teams">
                 <div>
@@ -544,40 +547,42 @@ const Home = (props) => {
               </table>
             </div>
           )}
-          <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-            {inPlayers.length > 0 && (
-              <div>
-                <button
-                  className="btn btn btn-danger"
-                  type="button"
-                  onClick={updateInPlayers}
-                >
-                  Delete IN Players
-                </button>
-                <button
-                  className="btn btn btn-default"
-                  type="button"
-                  onClick={initTeams}
-                >
-                  Init Teams
-                </button>
-                <button
-                  className="btn btn btn-danger"
-                  type="button"
-                  onClick={deleteTeams}
-                >
-                  Delete Teams
-                </button>
-                <button
-                  className="btn btn btn-success"
-                  type="button"
-                  onClick={saveTeams}
-                >
-                  Save Teams
-                </button>
-              </div>
-            )}
-          </div>
+          {isAdmin && (
+            <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+              {inPlayers.length > 0 && (
+                <div>
+                  <button
+                    className="btn btn btn-danger"
+                    type="button"
+                    onClick={updateInPlayers}
+                  >
+                    Delete IN Players
+                  </button>
+                  <button
+                    className="btn btn btn-default"
+                    type="button"
+                    onClick={initTeams}
+                  >
+                    Init Teams
+                  </button>
+                  <button
+                    className="btn btn btn-danger"
+                    type="button"
+                    onClick={deleteTeams}
+                  >
+                    Delete Teams
+                  </button>
+                  <button
+                    className="btn btn btn-success"
+                    type="button"
+                    onClick={saveTeams}
+                  >
+                    Save Teams
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
         </>
       )}
 
