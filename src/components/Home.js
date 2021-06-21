@@ -123,7 +123,7 @@ const Home = (props) => {
       (player) => player.role === Role.GoalKeeper
     );
     // reOrderList(players, "D", "FullDate");
-    let limitedPlayersNumber = 12 - goalKeepers.length;
+    let limitedPlayersNumber = 20;
     players = players.splice(
       0,
       players.length > limitedPlayersNumber
