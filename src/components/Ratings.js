@@ -107,22 +107,25 @@ const Ratings = () => {
                     {user.role === Role.Player ? "Player" : "Goal Keeper"}
                   </td>
                   <td className="rating-stars" style={{ minWidth: "250px" }}>
-                    {user.id !== currentUser.uid && myUserInfo.canRate && (
-                      <ReactStars
-                        count={10}
-                        onChange={(rating) => ratingChanged(user, rating)}
-                        size={window.innerWidth < 992 ? 30 : 24}
-                        activeColor="#F7C563"
-                        color="#dee2e6"
-                        isHalf={true}
-                        value={getMyRating(user.ratings)}
-                      />
-                    )}
-                    {!user.canRate && (
-                      <span style={{ color: "red" }}>
-                        This user can not be rated yet!
-                      </span>
-                    )}
+                    {user.id !== currentUser.uid &&
+                      myUserInfo.canRate &&
+                      user.canRate && (
+                        <ReactStars
+                          count={10}
+                          onChange={(rating) => ratingChanged(user, rating)}
+                          size={window.innerWidth < 992 ? 30 : 24}
+                          activeColor="#F7C563"
+                          color="#dee2e6"
+                          isHalf={true}
+                          value={getMyRating(user.ratings)}
+                        />
+                      )}
+                    {(!user.canRate || !myUserInfo.canRate) &&
+                      user.id !== currentUser.uid && (
+                        <span style={{ color: "red" }}>
+                          This user can not be rated yet!
+                        </span>
+                      )}
                     {user.id === currentUser.uid && (
                       <span style={{ color: "red" }}>
                         You cannot rate yourself!
