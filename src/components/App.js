@@ -33,7 +33,7 @@ const App = () => {
           >
             <div className="text-center p-3">
               <a onClick={openLink} className="text-white cursor-pointer">
-                © 2021 Powered by Alb Imeri
+                © 2021 Powered by Alb Imeri. Design by Orion Krasniqi
               </a>
             </div>
           </footer>

@@ -44,7 +44,17 @@ const Ratings = () => {
     fetchData();
   }, []);
 
-  const ratingChanged = (user, rating) => {
+  const ratingChanged = (user, rating) => { 
+    const aboveThreshHoldRating = rating - calculateRating(user.ratings, users) > 2.5 ;
+    const  belowThreshHoldRating=  calculateRating(user.ratings, users) - rating > 2.5;
+    if(belowThreshHoldRating && Object.keys(user.ratings).length > 0){
+    alert('You cannot rate 2.5 below the average rating')
+    return;
+    }
+    if(aboveThreshHoldRating && Object.keys(user.ratings).length > 0){
+    alert('You cannot rate 2.5 above the average rating')
+    return;
+    }
     db.collection("users")
       .doc(user.id)
       .update({
@@ -106,7 +116,7 @@ const Ratings = () => {
                   <td>
                     {user.role === Role.Player ? "Player" : "Goal Keeper"}
                   </td>
-                  <td className="rating-stars" style={{ minWidth: "250px" }}>
+                  <td className="rating-stars" style={{ minWidth: "250px", margin: '10px' }}>
                     {user.id !== currentUser.uid &&
                       myUserInfo.canRate &&
                       user.canRate && (

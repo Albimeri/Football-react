@@ -75,8 +75,7 @@ const UserInfo = () => {
 
         <h5> Select your role:</h5>
         <select
-          onChange={(event) => {
-            debugger;
+          onChange={(event) => { 
             setRole(+event.target.value);
           }}
         >

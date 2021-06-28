@@ -57,7 +57,7 @@ const Home = (props) => {
           }
         });
         const filtered = users.filter((item) => item.status !== Status.NOT_SET);
-        filtered.sort((a, b) => moment(a.time) - moment(b.time));
+        filtered.sort((a, b) => moment(a.time) - moment(b.time));  
         setInPlayers(filtered);
         setUsers(users);
       });
@@ -121,8 +121,7 @@ const Home = (props) => {
     let players = inPlayers.filter((player) => player.role === Role.Player);
     let goalKeepers = inPlayers.filter(
       (player) => player.role === Role.GoalKeeper
-    );
-    // reOrderList(players, "D", "FullDate");
+    ); 
     let limitedPlayersNumber = 20;
     players = players.splice(
       0,
@@ -308,7 +307,7 @@ const Home = (props) => {
       .set({
         ...myUserInfo,
         status,
-        time: moment().format("M/D/yyyy, h:mm:ss SSS"),
+        time: moment().format("MM-DD-YYYY h:mm:ss:SSS"),
       })
       .then(() => {
         console.log("Status successfully set!");
@@ -390,6 +389,7 @@ const Home = (props) => {
                       padding: "10px",
                       width: "250px",
                       minHeight: "94px",
+                      margin:'10px'
                     }}
                   >
                     {teams.team1.map((item) => (
@@ -411,10 +411,11 @@ const Home = (props) => {
                   <h3>Team Black</h3>
                   <div
                     style={{
-                      background: "rgb(237, 237, 237)",
+                      background: "rgb(24 5 5)",
                       padding: "10px",
                       width: "250px",
                       minHeight: "94px",
+                      margin:'10px'
                     }}
                   >
                     {teams.team2.map((item) => (
