@@ -111,7 +111,7 @@ const Ratings = () => {
                 <tr>
                   <th scope="row">{index + 1}</th>
                   <td>
-                    {user.name} {user.lastName}
+                    {`${user.name} ${user.lastName}`} 
                   </td>
                   <td>
                     {user.role === Role.Player ? "Player" : "Goal Keeper"}
