@@ -1,6 +1,6 @@
 /* width */
 ::-webkit-scrollbar {
-  width: 7px;
+  width: 12px;
 }
 
 /* Track */
@@ -144,38 +144,46 @@ main {
   margin-bottom: 50px;
 }
 
+tbody tr.in {
+  color: green;
+}
+
+tbody tr.out {
+  color: red;
+}
+
 /*
       Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
       */
 @media only screen and (max-width: 760px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
   /* Force table to not be like tables anymore */
-  table,
-  thead,
-  tbody,
-  th,
-  td,
-  tr {
+  table:not(.home-table),
+  table:not(.home-table) thead,
+  table:not(.home-table) tbody,
+  table:not(.home-table) th,
+  table:not(.home-table) td,
+  table:not(.home-table) tr {
     display: block;
   }
 
   /* Hide table headers (but not display: none;, for accessibility) */
-  thead tr {
+  table:not(.home-table) thead tr {
     position: absolute;
     top: -9999px;
     left: -9999px;
   }
 
-  tr {
+  table:not(.home-table) tr {
     margin: 0 0 1rem 0;
   }
 
-  tr:nth-child(odd) {
-    background: #ccc;
+  table:not(.home-table) tr:nth-child(odd) {
+    background: rgba(0,0,0,.05);
   }
 
-  td,
-  tbody th {
+  table:not(.home-table) td,
+  table:not(.home-table) tbody th {
     /* Behave  like a "row" */
     border: none;
     border-bottom: 1px solid #eee;
@@ -183,8 +191,8 @@ main {
     padding-left: 50% !important;
   }
 
-  td:before,
-  tbody th:before {
+  table:not(.home-table) td:before,
+  table:not(.home-table) tbody th:before {
     /* Now like a table header */
     position: absolute;
     /* Top/left values mimic padding */
@@ -194,6 +202,19 @@ main {
     width: 45%;
     padding-right: 10px;
     white-space: nowrap;
+  }
+
+  table:not(.home-table) td.rating-stars:before {
+    left: 28%;
+  }
+
+  table:not(.home-table) td.rating-stars {
+    padding-left: 46% !important;
+  }
+
+  .table.home-table td,
+  .table.home-table th {
+    min-width: initial;
   }
 
   /*
@@ -221,22 +242,6 @@ main {
 
   table.ratings-table .form-check-input {
     position: relative;
-  }
-
-  table.home-table tbody th:nth-of-type(1):before {
-    content: "No.";
-  }
-  table.home-table td:nth-of-type(1):before {
-    content: "Player";
-  }
-  table.home-table td:nth-of-type(2):before {
-    content: "Role";
-  }
-  table.home-table td:nth-of-type(3):before {
-    content: "Status";
-  }
-  table.home-table td:nth-of-type(4):before {
-    content: "Time";
   }
 
   .admin-teams > div,

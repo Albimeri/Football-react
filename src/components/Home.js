@@ -57,7 +57,7 @@ const Home = (props) => {
           }
         });
         const filtered = users.filter((item) => item.status !== Status.NOT_SET);
-        filtered.sort((a, b) => moment(a.time) - moment(b.time));  
+        filtered.sort((a, b) => moment(a.time) - moment(b.time));
         setInPlayers(filtered);
         setUsers(users);
       });
@@ -121,7 +121,7 @@ const Home = (props) => {
     let players = inPlayers.filter((player) => player.role === Role.Player);
     let goalKeepers = inPlayers.filter(
       (player) => player.role === Role.GoalKeeper
-    ); 
+    );
     let limitedPlayersNumber = 20;
     players = players.splice(
       0,
@@ -389,7 +389,7 @@ const Home = (props) => {
                       padding: "10px",
                       width: "250px",
                       minHeight: "94px",
-                      margin:'10px'
+                      margin: "10px",
                     }}
                   >
                     {teams.team1.map((item) => (
@@ -415,7 +415,7 @@ const Home = (props) => {
                       padding: "10px",
                       width: "250px",
                       minHeight: "94px",
-                      margin:'10px'
+                      margin: "10px",
                     }}
                   >
                     {teams.team2.map((item) => (
@@ -519,34 +519,47 @@ const Home = (props) => {
             </div>
           )}
           {inPlayers.length > 0 && (
-            <div class="table-responsive">
-              <table class="table table-striped table-sm home-table">
-                <thead>
-                  <tr>
-                    <th scope="col">No.</th>
-                    <th scope="col">Player</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {inPlayers.map((player, index) => (
+            <>
+              <h4 style={{ textAlign: "center", marginBottom: "30px" }}>
+                In Players:{" "}
+                {
+                  inPlayers.filter((player) => player.status === Status.IN)
+                    .length
+                }
+              </h4>
+              <div class="table-responsive">
+                <table class="table table-striped table-sm home-table">
+                  <thead>
                     <tr>
-                      <th scope="row">{index + 1}</th>
-                      <td>
-                        {player.name} {player.lastName}
-                      </td>
-                      <td>{player.status === Status.IN ? "IN" : "OUT"}</td>
-                      <td>
-                        {player.role === Role.Player ? "Player" : "Goalkeeper"}
-                      </td>
-                      <td>{player.time}</td>
+                      <th scope="col">No.</th>
+                      <th scope="col">Player</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Time</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {inPlayers.map((player, index) => (
+                      <tr
+                        className={player.status === Status.IN ? "in" : "out"}
+                      >
+                        <th scope="row">{index + 1}</th>
+                        <td className="player-name">
+                          {player.name} {player.lastName}
+                        </td>
+                        <td>{player.status === Status.IN ? "IN" : "OUT"}</td>
+                        <td>
+                          {player.role === Role.Player
+                            ? "Player"
+                            : "Goalkeeper"}
+                        </td>
+                        <td>{player.time}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )}
           {isAdmin && (
             <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
