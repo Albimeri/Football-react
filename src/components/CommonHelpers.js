@@ -28,7 +28,8 @@ export const calculateRating = (ratings, users) => {
       sum += ratings[item];
     }
   });
-  return ratingsArr.length === 0 ? 0 : sum / ratingsArr.length;
+  let result = ratingsArr.length === 0 ? 0 : sum / ratingsArr.length; 
+  return parseFloat(result.toFixed(2))
 };
 
 export const getPriviledgedUsers = (users) => {
