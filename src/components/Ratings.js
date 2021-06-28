@@ -100,6 +100,7 @@ const Ratings = () => {
     <>
       {users.length > 0 && (
         <div className="container">
+          <h4 style={{ marginBottom: "30px" }}>Ratings</h4>
           <table className="table table-striped ratings-table">
             <thead>
               <tr>
