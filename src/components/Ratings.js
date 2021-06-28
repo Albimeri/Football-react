@@ -11,6 +11,7 @@ import { calculateRating } from "./CommonHelpers";
 const Ratings = () => {
   const { currentUser } = useAuth();
   const [myUserInfo, setMyUserInfo] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
   const db = firebase.firestore();
 
@@ -34,6 +35,7 @@ const Ratings = () => {
             calculateRating(b.ratings, data) - calculateRating(a.ratings, data)
         );
         setUsers(data);
+        setIsLoading(false);
       });
     return () => {
       unsubscribeUsers();
@@ -44,17 +46,20 @@ const Ratings = () => {
     fetchData();
   }, []);
 
-  const ratingChanged = (user, rating) => { 
-    const aboveThreshHoldRating = rating - calculateRating(user.ratings, users) > 2.5 ;
-    const  belowThreshHoldRating=  calculateRating(user.ratings, users) - rating > 2.5;
-    if(belowThreshHoldRating && Object.keys(user.ratings).length > 0){
-    alert('You cannot rate 2.5 below the average rating')
-    return;
+  const ratingChanged = (user, rating) => {
+    const aboveThreshHoldRating =
+      rating - calculateRating(user.ratings, users) > 2.5;
+    const belowThreshHoldRating =
+      calculateRating(user.ratings, users) - rating > 2.5;
+    if (belowThreshHoldRating && Object.keys(user.ratings).length > 0) {
+      alert("You cannot rate 2.5 below the average rating");
+      return;
     }
-    if(aboveThreshHoldRating && Object.keys(user.ratings).length > 0){
-    alert('You cannot rate 2.5 above the average rating')
-    return;
+    if (aboveThreshHoldRating && Object.keys(user.ratings).length > 0) {
+      alert("You cannot rate 2.5 above the average rating");
+      return;
     }
+    setIsLoading(true);
     db.collection("users")
       .doc(user.id)
       .update({
@@ -110,14 +115,16 @@ const Ratings = () => {
               {users.map((user, index) => (
                 <tr>
                   <th scope="row">{index + 1}</th>
-                  <td>
-                    {`${user.name} ${user.lastName}`} 
-                  </td>
+                  <td>{`${user.name} ${user.lastName}`}</td>
                   <td>
                     {user.role === Role.Player ? "Player" : "Goal Keeper"}
                   </td>
-                  <td className="rating-stars" style={{ minWidth: "250px", margin: '10px' }}>
-                    {user.id !== currentUser.uid &&
+                  <td
+                    className="rating-stars"
+                    style={{ minWidth: "250px", margin: "10px" }}
+                  >
+                    {!isLoading &&
+                      user.id !== currentUser.uid &&
                       myUserInfo.canRate &&
                       user.canRate && (
                         <ReactStars
@@ -127,7 +134,9 @@ const Ratings = () => {
                           activeColor="#F7C563"
                           color="#dee2e6"
                           isHalf={true}
-                          value={getMyRating(user.ratings)}
+                          value={
+                            user.ratings ? user.ratings[currentUser.uid] : 0
+                          }
                         />
                       )}
                     {(!user.canRate || !myUserInfo.canRate) &&
