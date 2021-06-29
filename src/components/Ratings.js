@@ -30,6 +30,7 @@ const Ratings = () => {
             }
           }
         });
+        setIsLoading(true);
         data.sort(
           (a, b) =>
             calculateRating(b.ratings, data) - calculateRating(a.ratings, data)
@@ -59,7 +60,7 @@ const Ratings = () => {
       alert("You cannot rate 2.5 above the average rating");
       return;
     }
-    setIsLoading(true);
+
     db.collection("users")
       .doc(user.id)
       .update({
