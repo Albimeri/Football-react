@@ -16,7 +16,7 @@ const Home = (props) => {
   const [myUserInfo, setMyUserInfo] = useState(null);
   const [role, setRole] = useState(Role.Player);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [inPlayers, setInPlayers] = useState([]);
+  const [playersWithStatus, setplayersWithStatus] = useState([]);
   const [users, setUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState([]);
   const [teams, setTeams] = useState({
@@ -31,9 +31,9 @@ const Home = (props) => {
     fetchData();
   }, []);
 
-  const updateInPlayers = () => {
+  const updateplayersWithStatus = () => {
     const batch = db.batch();
-    inPlayers.forEach((item) => {
+    playersWithStatus.forEach((item) => {
       const toUpdatePlayer = db.collection("users").doc(item.id);
       batch.update(toUpdatePlayer, { status: Status.NOT_SET });
     });
@@ -58,7 +58,7 @@ const Home = (props) => {
         });
         const filtered = users.filter((item) => item.status !== Status.NOT_SET);
         filtered.sort((a, b) => moment(a.time) - moment(b.time));
-        setInPlayers(filtered);
+        setplayersWithStatus(filtered);
         setUsers(users);
       });
     const unsubscribeTeams = db
@@ -118,10 +118,10 @@ const Home = (props) => {
   };
 
   const initTeams = () => {
-    let players = inPlayers.filter(
+    let players = playersWithStatus.filter(
       (player) => player.role === Role.Player && player.status === Status.IN
     );
-    let goalKeepers = inPlayers.filter(
+    let goalKeepers = playersWithStatus.filter(
       (player) => player.role === Role.GoalKeeper && player.status === Status.IN
     );
     let limitedPlayersNumber = 20;
@@ -309,7 +309,7 @@ const Home = (props) => {
       .set({
         ...myUserInfo,
         status,
-        time: moment().format("MM-DD-YYYY h:mm:ss:SSS"),
+        time: moment().format("MM-DD-YYYY hh:mm:ss:SSS A"),
       })
       .then(() => {
         console.log("Status successfully set!");
@@ -403,7 +403,7 @@ const Home = (props) => {
                           background: "white",
                         }}
                       >
-                        {item.name} {item.lastName}{" "}
+                        {`${item.name} ${item.lastName}`}
                         {calculateRating(item.ratings, users)}
                       </div>
                     ))}
@@ -429,7 +429,7 @@ const Home = (props) => {
                           background: "white",
                         }}
                       >
-                        {item.name} {item.lastName}{" "}
+                        {`${item.name} ${item.lastName}`}
                         {calculateRating(item.ratings, users)}
                       </div>
                     ))}
@@ -468,7 +468,7 @@ const Home = (props) => {
                                       provided.draggableProps.style
                                     )}
                                   >
-                                    {item.name} {item.lastName}{" "}
+                                    {`${item.name} ${item.lastName}`}
                                     {calculateRating(item.ratings, users)}
                                   </div>
                                 )}
@@ -504,7 +504,7 @@ const Home = (props) => {
                                       provided.draggableProps.style
                                     )}
                                   >
-                                    {item.name} {item.lastName}{" "}
+                                    {`${item.name} ${item.lastName}`}
                                     {calculateRating(item.ratings, users)}
                                   </div>
                                 )}
@@ -520,13 +520,14 @@ const Home = (props) => {
               </div>
             </div>
           )}
-          {inPlayers.length > 0 && (
+          {playersWithStatus.length > 0 && (
             <>
               <h4 style={{ textAlign: "center", marginBottom: "30px" }}>
-                In Players:{" "}
+                In Players:
                 {
-                  inPlayers.filter((player) => player.status === Status.IN)
-                    .length
+                  playersWithStatus.filter(
+                    (player) => player.status === Status.IN
+                  ).length
                 }
               </h4>
               <div class="table-responsive">
@@ -541,23 +542,44 @@ const Home = (props) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {inPlayers.map((player, index) => (
-                      <tr
-                        className={player.status === Status.IN ? "in" : "out"}
-                      >
-                        <th scope="row">{index + 1}</th>
-                        <td className="player-name">
-                          {player.name} {player.lastName}
-                        </td>
-                        <td>{player.status === Status.IN ? "IN" : "OUT"}</td>
-                        <td>
-                          {player.role === Role.Player
-                            ? "Player"
-                            : "Goalkeeper"}
-                        </td>
-                        <td>{player.time}</td>
-                      </tr>
-                    ))}
+                    {playersWithStatus
+                      .filter((item) => item.role === Role.GoalKeeper)
+                      .map((player, index) => (
+                        <tr
+                          className={player.status === Status.IN ? "in" : "out"}
+                        >
+                          <th scope="row">{index + 1}</th>
+                          <td className="player-name">
+                            {`${player.name} ${player.lastName}`}
+                          </td>
+                          <td>{player.status === Status.IN ? "IN" : "OUT"}</td>
+                          <td>
+                            {player.role === Role.Player
+                              ? "Player"
+                              : "Goalkeeper"}
+                          </td>
+                          <td>{player.time}</td>
+                        </tr>
+                      ))}
+                    {playersWithStatus
+                      .filter((item) => item.role === Role.Player)
+                      .map((player, index) => (
+                        <tr
+                          className={player.status === Status.IN ? "in" : "out"}
+                        >
+                          <th scope="row">{index + 1}</th>
+                          <td className="player-name">
+                            {`${player.name} ${player.lastName}`}
+                          </td>
+                          <td>{player.status === Status.IN ? "IN" : "OUT"}</td>
+                          <td>
+                            {player.role === Role.Player
+                              ? "Player"
+                              : "Goalkeeper"}
+                          </td>
+                          <td>{player.time}</td>
+                        </tr>
+                      ))}
                   </tbody>
                 </table>
               </div>
@@ -565,12 +587,12 @@ const Home = (props) => {
           )}
           {isAdmin && (
             <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-              {inPlayers.length > 0 && (
+              {playersWithStatus.length > 0 && (
                 <div>
                   <button
                     className="btn btn btn-danger"
                     type="button"
-                    onClick={updateInPlayers}
+                    onClick={updateplayersWithStatus}
                   >
                     Delete IN Players
                   </button>

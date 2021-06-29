@@ -114,69 +114,143 @@ const Ratings = () => {
               </tr>
             </thead>
             <tbody>
-              {users.map((user, index) => (
-                <tr>
-                  <th scope="row">{index + 1}</th>
-                  <td>{`${user.name} ${user.lastName}`}</td>
-                  <td>
-                    {user.role === Role.Player ? "Player" : "Goal Keeper"}
-                  </td>
-                  <td
-                    className="rating-stars"
-                    style={{ minWidth: "250px", margin: "10px" }}
-                  >
-                    {!isLoading &&
-                      user.id !== currentUser.uid &&
-                      myUserInfo.canRate &&
-                      user.canRate && (
-                        <ReactStars
-                          count={10}
-                          onChange={(rating) => ratingChanged(user, rating)}
-                          size={window.innerWidth < 992 ? 30 : 24}
-                          activeColor="#F7C563"
-                          color="#dee2e6"
-                          isHalf={true}
-                          value={
-                            user.ratings ? user.ratings[currentUser.uid] : 0
-                          }
-                        />
-                      )}
-                    {(!user.canRate || !myUserInfo.canRate) &&
-                      user.id !== currentUser.uid && (
+              {users
+                .filter((item) => item.role === Role.Player)
+                .map((user, index) => (
+                  <tr>
+                    <th scope="row">{index + 1}</th>
+                    <td>{`${user.name} ${user.lastName}`}</td>
+                    <td>
+                      {user.role === Role.Player ? "Player" : "Goal Keeper"}
+                    </td>
+                    <td
+                      className="rating-stars"
+                      style={{ minWidth: "250px", margin: "10px" }}
+                    >
+                      {!isLoading &&
+                        user.id !== currentUser.uid &&
+                        myUserInfo.canRate &&
+                        user.canRate && (
+                          <ReactStars
+                            count={10}
+                            onChange={(rating) => ratingChanged(user, rating)}
+                            size={window.innerWidth < 992 ? 30 : 24}
+                            activeColor="#F7C563"
+                            color="#dee2e6"
+                            isHalf={true}
+                            value={
+                              user.ratings ? user.ratings[currentUser.uid] : 0
+                            }
+                          />
+                        )}
+                      {(!user.canRate || !myUserInfo.canRate) &&
+                        user.id !== currentUser.uid && (
+                          <span style={{ color: "red" }}>
+                            This user can not be rated yet!
+                          </span>
+                        )}
+                      {user.id === currentUser.uid && (
                         <span style={{ color: "red" }}>
-                          This user can not be rated yet!
+                          You cannot rate yourself!
                         </span>
                       )}
-                    {user.id === currentUser.uid && (
-                      <span style={{ color: "red" }}>
-                        You cannot rate yourself!
-                      </span>
-                    )}
-                  </td>
-                  <td>
-                    {user.canRate &&
-                      `${calculateRating(user.ratings, users)} (Rated by ${
-                        Object.keys(user.ratings).length
-                      })`}
-                    {!user.canRate && "N/A"}
-                  </td>
+                    </td>
+                    <td>
+                      {user.canRate &&
+                        `${calculateRating(user.ratings, users)} (Rated by ${
+                          Object.keys(user.ratings).length
+                        })`}
+                      {!user.canRate && "N/A"}
+                    </td>
 
-                  <td>
-                    {myUserInfo.isAdmin && (
-                      <div className="form-check form-switch">
-                        <input
-                          checked={user.canRate}
-                          onChange={() => toggleCanRate(user)}
-                          className="form-check-input"
-                          type="checkbox"
-                          id="flexSwitchCheckDefault"
-                        />
-                      </div>
-                    )}
-                    {!user.canRate && !myUserInfo.isAdmin && "Cannot rate yet!"}
-                  </td>
-                </tr>
-              ))}
+                    <td>
+                      {myUserInfo.isAdmin && (
+                        <div className="form-check form-switch">
+                          <input
+                            checked={user.canRate}
+                            onChange={() => toggleCanRate(user)}
+                            className="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      )}
+                      {!user.canRate &&
+                        !myUserInfo.isAdmin &&
+                        "Cannot rate yet!"}
+                    </td>
+                  </tr>
+                ))}
+              <h4 style={{ marginBottom: "30px", marginTop: "30px" }}>
+                Goal Keepers
+              </h4>
+              {users
+                .filter((item) => item.role === Role.GoalKeeper)
+                .map((user, index) => (
+                  <tr>
+                    <th scope="row">{index + 1}</th>
+                    <td>{`${user.name} ${user.lastName}`}</td>
+                    <td>
+                      {user.role === Role.Player ? "Player" : "Goal Keeper"}
+                    </td>
+                    <td
+                      className="rating-stars"
+                      style={{ minWidth: "250px", margin: "10px" }}
+                    >
+                      {!isLoading &&
+                        user.id !== currentUser.uid &&
+                        myUserInfo.canRate &&
+                        user.canRate && (
+                          <ReactStars
+                            count={10}
+                            onChange={(rating) => ratingChanged(user, rating)}
+                            size={window.innerWidth < 992 ? 30 : 24}
+                            activeColor="#F7C563"
+                            color="#dee2e6"
+                            isHalf={true}
+                            value={
+                              user.ratings ? user.ratings[currentUser.uid] : 0
+                            }
+                          />
+                        )}
+                      {(!user.canRate || !myUserInfo.canRate) &&
+                        user.id !== currentUser.uid && (
+                          <span style={{ color: "red" }}>
+                            This user can not be rated yet!
+                          </span>
+                        )}
+                      {user.id === currentUser.uid && (
+                        <span style={{ color: "red" }}>
+                          You cannot rate yourself!
+                        </span>
+                      )}
+                    </td>
+                    <td>
+                      {user.canRate &&
+                        `${calculateRating(user.ratings, users)} (Rated by ${
+                          Object.keys(user.ratings).length
+                        })`}
+                      {!user.canRate && "N/A"}
+                    </td>
+
+                    <td>
+                      {myUserInfo.isAdmin && (
+                        <div className="form-check form-switch">
+                          <input
+                            checked={user.canRate}
+                            onChange={() => toggleCanRate(user)}
+                            className="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      )}
+                      {!user.canRate &&
+                        !myUserInfo.isAdmin &&
+                        "Cannot rate yet!"}
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>
