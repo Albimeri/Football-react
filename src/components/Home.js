@@ -118,9 +118,11 @@ const Home = (props) => {
   };
 
   const initTeams = () => {
-    let players = inPlayers.filter((player) => player.role === Role.Player);
+    let players = inPlayers.filter(
+      (player) => player.role === Role.Player && player.status === Status.IN
+    );
     let goalKeepers = inPlayers.filter(
-      (player) => player.role === Role.GoalKeeper
+      (player) => player.role === Role.GoalKeeper && player.status === Status.IN
     );
     let limitedPlayersNumber = 20;
     players = players.splice(
