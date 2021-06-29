@@ -1,6 +1,11 @@
+body {
+  font-family: "PT Sans", sans-serif;
+}
+
 /* width */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
+  height: 8px;
 }
 
 /* Track */
@@ -86,6 +91,10 @@ select {
   margin: 15px auto;
 }
 
+.navbar-brand {
+  font-size: 16px;
+}
+
 .table td,
 .table th {
   min-width: 100px;
@@ -157,6 +166,11 @@ tbody tr.out {
       */
 @media only screen and (max-width: 760px),
   (min-device-width: 768px) and (max-device-width: 1024px) {
+  .table td,
+  .table th {
+    font-size: 14px;
+  }
+
   /* Force table to not be like tables anymore */
   table:not(.home-table),
   table:not(.home-table) thead,
@@ -179,7 +193,7 @@ tbody tr.out {
   }
 
   table:not(.home-table) tr:nth-child(odd) {
-    background: rgba(0,0,0,.05);
+    background: rgba(0, 0, 0, 0.05);
   }
 
   table:not(.home-table) td,

@@ -13,6 +13,7 @@ const Ratings = () => {
   const [myUserInfo, setMyUserInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState([]);
+  const [starsVisibility, showStars] = useState(false);
   const db = firebase.firestore();
 
   // currentUser.uid --- my id
@@ -101,7 +102,21 @@ const Ratings = () => {
     <>
       {users.length > 0 && (
         <div className="container">
-          <h4 style={{ marginBottom: "30px" }}>Ratings</h4>
+          <div
+            className="flex"
+            style={{ alignItems: "center", marginBottom: "30px" }}
+          >
+            <h4>Ratings</h4>
+            <button
+              style={{ marginLeft: "15px", height: "40px" }}
+              onClick={() =>
+                showStars((prevStarsVisibility) => !prevStarsVisibility)
+              }
+              className="btn btn-primary"
+            >
+              {starsVisibility ? "Hide Ratings" : "Show Ratings"}
+            </button>
+          </div>
           <table className="table table-striped ratings-table">
             <thead>
               <tr>
@@ -131,26 +146,39 @@ const Ratings = () => {
                         user.id !== currentUser.uid &&
                         myUserInfo.canRate &&
                         user.canRate && (
-                          <ReactStars
-                            count={10}
-                            onChange={(rating) => ratingChanged(user, rating)}
-                            size={window.innerWidth < 992 ? 30 : 24}
-                            activeColor="#F7C563"
-                            color="#dee2e6"
-                            isHalf={true}
-                            value={
-                              user.ratings ? user.ratings[currentUser.uid] : 0
-                            }
-                          />
+                          <>
+                            {starsVisibility && (
+                              <ReactStars
+                                count={10}
+                                onChange={(rating) =>
+                                  ratingChanged(user, rating)
+                                }
+                                size={window.innerWidth < 992 ? 30 : 24}
+                                activeColor="#F7C563"
+                                color="#dee2e6"
+                                isHalf={true}
+                                value={
+                                  user.ratings
+                                    ? user.ratings[currentUser.uid]
+                                    : 0
+                                }
+                              />
+                            )}
+                            {!starsVisibility && (
+                              <span style={{ color: "red" }}>
+                                Rating visibility: Off
+                              </span>
+                            )}
+                          </>
                         )}
                       {(!user.canRate || !myUserInfo.canRate) &&
                         user.id !== currentUser.uid && (
-                          <span style={{ color: "red" }}>
+                          <span style={{ color: "red", fontWeight: "600" }}>
                             This user can not be rated yet!
                           </span>
                         )}
                       {user.id === currentUser.uid && (
-                        <span style={{ color: "red" }}>
+                        <span style={{ color: "red", fontWeight: "600" }}>
                           You cannot rate yourself!
                         </span>
                       )}
@@ -175,9 +203,11 @@ const Ratings = () => {
                           />
                         </div>
                       )}
-                      {!user.canRate &&
-                        !myUserInfo.isAdmin &&
-                        "Cannot rate yet!"}
+                      {!user.canRate && !myUserInfo.isAdmin && (
+                        <span style={{ color: "red", fontWeight: "600" }}>
+                          Cannot rate yet!
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -201,17 +231,30 @@ const Ratings = () => {
                         user.id !== currentUser.uid &&
                         myUserInfo.canRate &&
                         user.canRate && (
-                          <ReactStars
-                            count={10}
-                            onChange={(rating) => ratingChanged(user, rating)}
-                            size={window.innerWidth < 992 ? 30 : 24}
-                            activeColor="#F7C563"
-                            color="#dee2e6"
-                            isHalf={true}
-                            value={
-                              user.ratings ? user.ratings[currentUser.uid] : 0
-                            }
-                          />
+                          <>
+                            {starsVisibility && (
+                              <ReactStars
+                                count={10}
+                                onChange={(rating) =>
+                                  ratingChanged(user, rating)
+                                }
+                                size={window.innerWidth < 992 ? 30 : 24}
+                                activeColor="#F7C563"
+                                color="#dee2e6"
+                                isHalf={true}
+                                value={
+                                  user.ratings
+                                    ? user.ratings[currentUser.uid]
+                                    : 0
+                                }
+                              />
+                            )}
+                            {!starsVisibility && (
+                              <span style={{ color: "red" }}>
+                                Rating visibility: Off
+                              </span>
+                            )}
+                          </>
                         )}
                       {(!user.canRate || !myUserInfo.canRate) &&
                         user.id !== currentUser.uid && (
@@ -245,9 +288,11 @@ const Ratings = () => {
                           />
                         </div>
                       )}
-                      {!user.canRate &&
-                        !myUserInfo.isAdmin &&
-                        "Cannot rate yet!"}
+                      {!user.canRate && !myUserInfo.isAdmin && (
+                        <span style={{ color: "red", fontWeight: "600" }}>
+                          Cannot rate yet!
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}

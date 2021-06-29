@@ -319,6 +319,24 @@ const Home = (props) => {
       });
   };
 
+  const setToOut = (player, status) => {
+    if (player.id) {
+      db.collection("users")
+        .doc(player.id)
+        .set({
+          ...player,
+          status,
+          time: moment().format("MM-DD-YYYY hh:mm:ss:SSS A"),
+        })
+        .then(() => {
+          console.log("Status successfully set!");
+        })
+        .catch((error) => {
+          console.error("Error setting status: ", error);
+        });
+    }
+  };
+
   return (
     <div className="container">
       {!currentUser.emailVerified && (
@@ -523,7 +541,7 @@ const Home = (props) => {
           {playersWithStatus.length > 0 && (
             <>
               <h4 style={{ textAlign: "center", marginBottom: "30px" }}>
-                In Players:
+                In Players:{" "}
                 {
                   playersWithStatus.filter(
                     (player) => player.status === Status.IN
@@ -552,7 +570,31 @@ const Home = (props) => {
                           <td className="player-name">
                             {`${player.name} ${player.lastName}`}
                           </td>
-                          <td>{player.status === Status.IN ? "IN" : "OUT"}</td>
+                          <td className="flex">
+                            <div style={{ width: "35px" }}>
+                              {player.status === Status.IN ? "IN" : "OUT"}
+                            </div>
+                            {isAdmin && player.id && (
+                              <button
+                                style={{ marginLeft: "5px" }}
+                                className={`btn${
+                                  player.status === Status.IN
+                                    ? " btn-outline-danger"
+                                    : " btn-outline-success"
+                                }`}
+                                onClick={() =>
+                                  setToOut(
+                                    player,
+                                    player.status === Status.IN
+                                      ? Status.OUT
+                                      : Status.IN
+                                  )
+                                }
+                              >
+                                Set {player.status === Status.IN ? "OUT" : "IN"}
+                              </button>
+                            )}
+                          </td>
                           <td>
                             {player.role === Role.Player
                               ? "Player"
@@ -571,7 +613,31 @@ const Home = (props) => {
                           <td className="player-name">
                             {`${player.name} ${player.lastName}`}
                           </td>
-                          <td>{player.status === Status.IN ? "IN" : "OUT"}</td>
+                          <td className="flex">
+                            <div style={{ width: "35px" }}>
+                              {player.status === Status.IN ? "IN" : "OUT"}
+                            </div>
+                            {isAdmin && player.id && (
+                              <button
+                                style={{ marginLeft: "5px" }}
+                                className={`btn${
+                                  player.status === Status.IN
+                                    ? " btn-outline-danger"
+                                    : " btn-outline-success"
+                                }`}
+                                onClick={() =>
+                                  setToOut(
+                                    player,
+                                    player.status === Status.IN
+                                      ? Status.OUT
+                                      : Status.IN
+                                  )
+                                }
+                              >
+                                Set {player.status === Status.IN ? "OUT" : "IN"}
+                              </button>
+                            )}
+                          </td>
                           <td>
                             {player.role === Role.Player
                               ? "Player"
