@@ -650,7 +650,11 @@ const Home = (props) => {
                             </div>
                             {isAdmin && player.id && (
                               <button
-                                style={{ marginLeft: "5px" }}
+                                style={{
+                                  marginLeft: "5px",
+                                  fontSize: "12px",
+                                  width: "75px",
+                                }}
                                 className={`btn${
                                   player.status === Status.IN
                                     ? " btn-outline-danger"
@@ -665,7 +669,7 @@ const Home = (props) => {
                                   )
                                 }
                               >
-                                Set {player.status === Status.IN ? "OUT" : "IN"}
+                                SET {player.status === Status.IN ? "OUT" : "IN"}
                               </button>
                             )}
                           </td>
@@ -693,7 +697,11 @@ const Home = (props) => {
                             </div>
                             {isAdmin && player.id && (
                               <button
-                                style={{ marginLeft: "5px" }}
+                                style={{
+                                  marginLeft: "5px",
+                                  fontSize: "12px",
+                                  width: "75px",
+                                }}
                                 className={`btn${
                                   player.status === Status.IN
                                     ? " btn-outline-danger"
@@ -708,7 +716,7 @@ const Home = (props) => {
                                   )
                                 }
                               >
-                                Set {player.status === Status.IN ? "OUT" : "IN"}
+                                SET {player.status === Status.IN ? "OUT" : "IN"}
                               </button>
                             )}
                           </td>

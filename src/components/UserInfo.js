@@ -9,11 +9,7 @@ import { Role, Companies } from "../constants/enums";
 const UserInfo = () => {
   const { currentUser } = useAuth();
   const [myUserInfo, setMyUserInfo] = useState(null);
-  const [matchHour, setMatchHour] = useState(21);
-  const [matchDay, setMatchDay] = useState(2);
-  const [matchFiled, setMatchFiled] = useState(null);
-  const [matchPlayers, setMatchPlayers] = useState(20);
-  const [role, setRole] = useState(1);
+  const [selectedRole, setRole] = useState(1);
   const [primaryPosition, setPrimaryPosition] = useState("CB");
   const [secondaryPosition, setSecondayPosition] = useState("CM");
   const db = firebase.firestore();
@@ -93,6 +89,17 @@ const UserInfo = () => {
     },
   ];
 
+  const roles = [
+    {
+      description: "Player",
+      key: 1,
+    },
+    {
+      description: "GoalKeeper",
+      key: 2,
+    },
+  ];
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -110,6 +117,8 @@ const UserInfo = () => {
               if (user.primaryPosition) {
                 setPrimaryPosition(user.primaryPosition);
                 setSecondayPosition(user.secondaryPosition);
+                debugger;
+                setRole(user.role);
               }
             }
           }
@@ -128,6 +137,7 @@ const UserInfo = () => {
         ...myUserInfo,
         primaryPosition,
         secondaryPosition,
+        role: selectedRole,
       })
       .then(() => {
         console.log("Status successfully set!");
@@ -140,66 +150,78 @@ const UserInfo = () => {
   return (
     <>
       {myUserInfo && (
-        <div>
-          <h1>
-            Welcome {myUserInfo.name} {myUserInfo.lastName}
-          </h1>
-          <h5> Select your role:</h5>
-          <select
-            onChange={(event) => {
-              setRole(+event.target.value);
-            }}
-          >
-            <option value={Role.Player}>Player</option>
-            <option value={Role.GoalKeeper}>Goal Keeper</option>
-          </select>
-          {role === Role.Player && (
-            <>
+        <div className="container">
+          <section className="admin-section-wrapper">
+            <h4>My Information</h4>
+            <div className="flex admin-section">
               <div>
-                <span>Primary Position</span>
+                <h5> Select your role:</h5>
                 <select
                   onChange={(event) => {
-                    setPrimaryPosition(event.target.value);
+                    setRole(+event.target.value);
                   }}
                 >
-                  {positions.map((position) => (
+                  {roles.map((role) => (
                     <option
-                      selected={primaryPosition === position.role}
-                      value={position.role}
-                    >{`${position.description} (${position.role})`}</option>
+                      selected={role.key === selectedRole}
+                      value={role.key}
+                    >
+                      {role.description}
+                    </option>
                   ))}
                 </select>
               </div>
+              {selectedRole === Role.Player && (
+                <>
+                  <div>
+                    <span>Primary Position</span>
+                    <select
+                      onChange={(event) => {
+                        setPrimaryPosition(event.target.value);
+                      }}
+                    >
+                      {positions.map((position) => (
+                        <option
+                          selected={primaryPosition === position.role}
+                          value={position.role}
+                        >{`${position.description} (${position.role})`}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <span>Secondary Position</span>
+                    <select
+                      onChange={(event) => {
+                        setSecondayPosition(event.target.value);
+                      }}
+                    >
+                      {positions.map((position) => (
+                        <option
+                          selected={secondaryPosition === position.role}
+                          value={position.role}
+                        >{`${position.description} (${position.role})`}</option>
+                      ))}
+                    </select>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="flex admin-section">
               <div>
-                <span>Secondary Position</span>
-                <select
-                  onChange={(event) => {
-                    setSecondayPosition(event.target.value);
-                  }}
+                <button
+                  type="button"
+                  className="btn btn-success"
+                  onClick={saveMyInfo}
                 >
-                  {positions.map((position) => (
-                    <option
-                      selected={secondaryPosition === position.role}
-                      value={position.role}
-                    >{`${position.description} (${position.role})`}</option>
-                  ))}
-                </select>
+                  Save my info
+                </button>
               </div>
               <div>
                 <h3>A sample of soccer positions</h3>
                 <img src="../../../football.png"></img>
               </div>
-            </>
-          )}
-          <div>
-            <button
-              type="button"
-              className="btn btn-success"
-              onClick={saveMyInfo}
-            >
-              Save my info
-            </button>
-          </div>
+            </div>
+          </section>
         </div>
       )}
     </>
