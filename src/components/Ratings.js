@@ -258,7 +258,12 @@ const Ratings = () => {
                               />
                             )}
                             {!starsVisibility && (
-                              <span style={{ color: "red" }}>
+                              <span
+                                style={{
+                                  color: "#212529",
+                                  fontStyle: "italic",
+                                }}
+                              >
                                 Rating visibility: Off
                               </span>
                             )}
