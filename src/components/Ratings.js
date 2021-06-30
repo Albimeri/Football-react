@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import { generateId } from "./CommonHelpers";
 import firebase from "firebase";
-import moment from "moment";
-import { Status, Role } from "../constants/enums";
+import { Role } from "../constants/enums";
 import ReactStars from "react-rating-stars-component";
 import { calculateRating } from "./CommonHelpers";
 

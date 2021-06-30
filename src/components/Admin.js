@@ -31,8 +31,7 @@ const Admin = () => {
     },
   ];
 
-  const savePlayer = () => {
-    debugger;
+  const savePlayer = () => { 
     if (player.name.trim().length === 0 || rating > 10 || rating < 0) {
       return;
     }

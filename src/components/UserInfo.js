@@ -4,8 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { generateId } from "./CommonHelpers";
 import { hoursEnum } from "../constants/enums";
 import firebase from "firebase";
-import moment from "moment";
-import { Status, Role, Companies } from "../constants/enums";
+import { Role, Companies } from "../constants/enums";
 
 const UserInfo = () => {
   const { currentUser } = useAuth();
@@ -15,100 +14,194 @@ const UserInfo = () => {
   const [matchFiled, setMatchFiled] = useState(null);
   const [matchPlayers, setMatchPlayers] = useState(20);
   const [role, setRole] = useState(1);
-  const [rating, setRating] = useState(5);
-  const [playerName, setPlayerName] = useState("");
+  const [primaryPosition, setPrimaryPosition] = useState("CB");
+  const [secondaryPosition, setSecondayPosition] = useState("CM");
   const db = firebase.firestore();
 
   // currentUser.uid --- my id
 
+  const positions = [
+    {
+      role: "CB",
+      description: "Center Back",
+      key: 1,
+    },
+    {
+      role: "LB",
+      description: "Left Back",
+      key: 2,
+    },
+    {
+      role: "RB",
+      description: "Right Back",
+      key: 3,
+    },
+    {
+      role: "RWB",
+      description: "Left Wing Back",
+      key: 32,
+    },
+    {
+      role: "RWB",
+      description: "Right Wing Back",
+      key: 31,
+    },
+    {
+      role: "DM",
+      description: "Defensive Midfielder",
+      key: 4,
+    },
+    {
+      role: "CM",
+      description: "Center Midfielder",
+      key: 5,
+    },
+    {
+      role: "LM",
+      description: "Left Midfielder",
+      key: 6,
+    },
+    {
+      role: "RM",
+      description: "Right Midfielder",
+      key: 7,
+    },
+    {
+      role: "LW",
+      description: "Left Wing",
+      key: 8,
+    },
+    {
+      role: "RW",
+      description: "Right Wing",
+      key: 9,
+    },
+    {
+      role: "AM",
+      description: "Attacker Midfielder",
+      key: 10,
+    },
+    {
+      role: "SS",
+      description: "Second Striker",
+      key: 11,
+    },
+    {
+      role: "CF",
+      description: "Center Forward",
+      key: 11,
+    },
+  ];
+
   useEffect(() => {
-    db.collection("users")
-      .doc(currentUser.uid)
-      .get()
-      .then((doc) => {
-        if (doc.exists) {
-          const userInfo = doc.data();
-          setMyUserInfo(userInfo);
-        }
-      })
-      .catch((error) => {
-        console.log("Error getting document:", error);
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const unsubscribeUsers = db
+      .collection("users")
+      .where("secretId", "==", Companies.SOLABORATE)
+      .onSnapshot((querySnapshot) => {
+        querySnapshot.forEach((doc) => {
+          if (doc.exists) {
+            const user = doc.data();
+            if (user.id === currentUser.uid) {
+              setMyUserInfo(user);
+              if (user.primaryPosition) {
+                setPrimaryPosition(user.primaryPosition);
+                setSecondayPosition(user.secondaryPosition);
+              }
+            }
+          }
+        });
       });
-  }, [currentUser.uid]);
 
-  //   useEffect(() => {
-  //     updateRole(role);
-  //   }, [role]);
+    return () => {
+      unsubscribeUsers();
+    };
+  };
 
-  const updateRole = (role) => {
+  const saveMyInfo = () => {
     db.collection("users")
-      .doc(currentUser.uid)
+      .doc(myUserInfo.id)
       .set({
         ...myUserInfo,
-        role,
+        primaryPosition,
+        secondaryPosition,
       })
       .then(() => {
-        console.log("Role successfully set!");
+        console.log("Status successfully set!");
       })
       .catch((error) => {
-        console.error("Error setting role: ", error);
+        console.error("Error setting status: ", error);
       });
   };
 
   return (
     <>
       {myUserInfo && (
-        <h1>
-          Welcome {myUserInfo.name} {myUserInfo.lastName}
-        </h1>
-      )}
-      <section className="jumbotron">
-        <h1>Add players</h1>
-
         <div>
-          <input
-            placeholder="Player name"
-            onChange={(event) => setPlayerName(event.target.value)}
-            value={playerName}
-          />
-        </div>
-
-        <h5> Select your role:</h5>
-        <select
-          onChange={(event) => { 
-            setRole(+event.target.value);
-          }}
-        >
-          <option value={Role.Player}>Player</option>
-          <option value={Role.GoalKeeper}>Goal Keeper</option>
-        </select>
-
-        <div>
-          <span>Role</span>
+          <h1>
+            Welcome {myUserInfo.name} {myUserInfo.lastName}
+          </h1>
+          <h5> Select your role:</h5>
           <select
             onChange={(event) => {
               setRole(+event.target.value);
             }}
           >
-            {hoursEnum.map((hour) => (
-              <option value={hour.key}>{hour.description}</option>
-            ))}
+            <option value={Role.Player}>Player</option>
+            <option value={Role.GoalKeeper}>Goal Keeper</option>
           </select>
+          {role === Role.Player && (
+            <>
+              <div>
+                <span>Primary Position</span>
+                <select
+                  onChange={(event) => {
+                    setPrimaryPosition(event.target.value);
+                  }}
+                >
+                  {positions.map((position) => (
+                    <option
+                      selected={primaryPosition === position.role}
+                      value={position.role}
+                    >{`${position.description} (${position.role})`}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <span>Secondary Position</span>
+                <select
+                  onChange={(event) => {
+                    setSecondayPosition(event.target.value);
+                  }}
+                >
+                  {positions.map((position) => (
+                    <option
+                      selected={secondaryPosition === position.role}
+                      value={position.role}
+                    >{`${position.description} (${position.role})`}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <h3>A sample of soccer positions</h3>
+                <img src="../../../football.png"></img>
+              </div>
+            </>
+          )}
+          <div>
+            <button
+              type="button"
+              className="btn btn-success"
+              onClick={saveMyInfo}
+            >
+              Save my info
+            </button>
+          </div>
         </div>
-
-        <div>
-          <span>Rating</span>
-          <select
-            onChange={(event) => {
-              setRating(+event.target.value);
-            }}
-          >
-            {hoursEnum.map((hour) => (
-              <option value={hour.key}>{hour.description}</option>
-            ))}
-          </select>
-        </div>
-      </section>
+      )}
     </>
   );
 };

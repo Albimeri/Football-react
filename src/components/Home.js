@@ -446,8 +446,11 @@ const Home = (props) => {
                           background: "white",
                         }}
                       >
-                        {`${item.name} ${item.lastName}`}
+                        {`${item.name} ${item.lastName} `}
                         {calculateRating(item.ratings, users)}
+                        {item.primaryPosition
+                          ? `(${item.primaryPosition}/${item.secondaryPosition})`
+                          : ""}
                       </div>
                     ))}
                   </div>
@@ -472,8 +475,11 @@ const Home = (props) => {
                           background: "white",
                         }}
                       >
-                        {`${item.name} ${item.lastName}`}
+                        {`${item.name} ${item.lastName} `}
                         {calculateRating(item.ratings, users)}
+                        {item.primaryPosition
+                          ? `(${item.primaryPosition}/${item.secondaryPosition})`
+                          : ""}
                       </div>
                     ))}
                   </div>
@@ -511,9 +517,14 @@ const Home = (props) => {
                                       provided.draggableProps.style
                                     )}
                                   >
-                                    {`${item.name} 
-                                    ${item.lastName}
-                                    ${calculateRating(item.ratings, users)} 
+                                    {`${item.name} ${item.lastName}  
+                                      ${calculateRating(item.ratings, users)} 
+                                     ${
+                                       item.primaryPosition
+                                         ? `(${item.primaryPosition}/${item.secondaryPosition})`
+                                         : ""
+                                     } 
+                                  
                                     ${
                                       item.role === Role.GoalKeeper
                                         ? "(GK)"
@@ -556,6 +567,12 @@ const Home = (props) => {
                                     {`${item.name} 
                                     ${item.lastName}
                                     ${calculateRating(item.ratings, users)} 
+                                    ${
+                                      item.primaryPosition
+                                        ? `(${item.primaryPosition}/${item.secondaryPosition})`
+                                        : ""
+                                    } 
+                                   
                                     ${
                                       item.role === Role.GoalKeeper
                                         ? "(GK)"
