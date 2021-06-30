@@ -54,7 +54,7 @@ const Home = (props) => {
         });
         const filtered = users.filter((item) => item.status !== Status.NOT_SET);
         filtered.sort((a, b) => moment(a.time) - moment(b.time));
-        setplayersWithStatus(filtered); 
+        setplayersWithStatus(filtered);
         setUsers(users);
       });
     const unsubscribeTeams = db
@@ -575,6 +575,26 @@ const Home = (props) => {
               </div>
             </div>
           )}
+          {isAdmin && (
+            <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+              <div>
+                <button
+                  className="btn btn btn-danger"
+                  type="button"
+                  onClick={deleteTeams}
+                >
+                  Delete Teams
+                </button>
+                <button
+                  className="btn btn btn-success"
+                  type="button"
+                  onClick={saveTeams}
+                >
+                  Save Teams
+                </button>
+              </div>
+            </div>
+          )}
           {playersWithStatus.length > 0 && (
             <>
               <h4 style={{ textAlign: "center", marginBottom: "30px" }}>
@@ -705,20 +725,6 @@ const Home = (props) => {
                     onClick={initTeams}
                   >
                     Init Teams
-                  </button>
-                  <button
-                    className="btn btn btn-danger"
-                    type="button"
-                    onClick={deleteTeams}
-                  >
-                    Delete Teams
-                  </button>
-                  <button
-                    className="btn btn btn-success"
-                    type="button"
-                    onClick={saveTeams}
-                  >
-                    Save Teams
                   </button>
                 </div>
               )}
