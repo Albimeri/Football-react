@@ -262,7 +262,7 @@ const Home = (props) => {
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: "none",
-    padding: grid * 1.5,
+    padding: "15px",
     margin: `0 0 ${grid}px 0`,
     background: "white",
     ...draggableStyle,
@@ -270,7 +270,7 @@ const Home = (props) => {
 
   const getItemStyleBlack = (isDragging, draggableStyle) => ({
     userSelect: "none",
-    padding: grid * 1.5,
+    padding: "15px",
     margin: `0 0 ${grid}px 0`,
     background: "black",
     color: "white",
@@ -280,7 +280,7 @@ const Home = (props) => {
   const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? "lightblue" : "#ededed",
     padding: grid,
-    width: 250,
+    width: 350,
     minHeight: 94,
   });
 
