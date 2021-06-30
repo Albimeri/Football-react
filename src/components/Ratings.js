@@ -134,7 +134,9 @@ const Ratings = () => {
                     <th scope="row">{index + 1}</th>
                     <td>{`${user.name} ${user.lastName}`}</td>
                     <td>
-                      {user.role === Role.Player ? "Player" : "Goal Keeper"}
+                      {user.role !== Role.GoalKeeper
+                        ? `${user.primaryPosition}/${user.secondaryPosition}`
+                        : "Goal Keeper"}
                     </td>
                     <td
                       className="rating-stars"
@@ -229,7 +231,9 @@ const Ratings = () => {
                     <th scope="row">{index + 1}</th>
                     <td>{`${user.name} ${user.lastName}`}</td>
                     <td>
-                      {user.role === Role.Player ? "Player" : "Goal Keeper"}
+                      {user.role !== Role.GoalKeeper
+                        ? `${user.primaryPosition}/${user.secondaryPosition}`
+                        : "Goal Keeper"}
                     </td>
                     <td
                       className="rating-stars"
