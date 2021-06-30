@@ -136,13 +136,6 @@ const Home = (props) => {
       let average2 = calculateRating(b.ratings, users);
       return average1 < average2 ? 1 : -1;
     });
-    goalKeepers.forEach((goalKeeper, index) => {
-      let team = (index + 1) % 2 === 0 ? 1 : 2;
-      goalKeeper.team = team;
-      team === 1
-        ? team1.players.push(goalKeeper)
-        : team2.players.push(goalKeeper);
-    });
 
     players.sort((a, b) =>
       calculateRating(a.ratings, users) < calculateRating(b.ratings, users) ||
@@ -151,6 +144,13 @@ const Home = (props) => {
         : -1
     );
     const { team1, team2 } = seperatePlayers(players);
+
+    goalKeepers.forEach((goalKeeper, index) => {
+      let team = (index + 1) % 2 === 0 ? 1 : 2;
+      goalKeeper.team = team;
+      team === 1 ? team1.push(goalKeeper) : team2.push(goalKeeper);
+    });
+
     setTeams({ team1, team2 });
   };
 
@@ -486,8 +486,14 @@ const Home = (props) => {
                                       provided.draggableProps.style
                                     )}
                                   >
-                                    {`${item.name} ${item.lastName}`}
-                                    {calculateRating(item.ratings, users)}
+                                    {`${item.name} 
+                                    ${item.lastName}
+                                    ${calculateRating(item.ratings, users)} 
+                                    ${
+                                      item.role === Role.GoalKeeper
+                                        ? "(GK)"
+                                        : ""
+                                    }`}
                                   </div>
                                 )}
                               </Draggable>
@@ -522,8 +528,14 @@ const Home = (props) => {
                                       provided.draggableProps.style
                                     )}
                                   >
-                                    {`${item.name} ${item.lastName}`}
-                                    {calculateRating(item.ratings, users)}
+                                    {`${item.name} 
+                                    ${item.lastName}
+                                    ${calculateRating(item.ratings, users)} 
+                                    ${
+                                      item.role === Role.GoalKeeper
+                                        ? "(GK)"
+                                        : ""
+                                    }`}
                                   </div>
                                 )}
                               </Draggable>
