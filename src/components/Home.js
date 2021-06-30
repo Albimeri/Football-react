@@ -54,8 +54,7 @@ const Home = (props) => {
         });
         const filtered = users.filter((item) => item.status !== Status.NOT_SET);
         filtered.sort((a, b) => moment(a.time) - moment(b.time));
-        setplayersWithStatus(filtered);
-        debugger;
+        setplayersWithStatus(filtered); 
         setUsers(users);
       });
     const unsubscribeTeams = db
@@ -263,7 +262,7 @@ const Home = (props) => {
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: "none",
-    padding: grid * 2,
+    padding: grid * 1.5,
     margin: `0 0 ${grid}px 0`,
     background: "white",
     ...draggableStyle,
@@ -271,7 +270,7 @@ const Home = (props) => {
 
   const getItemStyleBlack = (isDragging, draggableStyle) => ({
     userSelect: "none",
-    padding: grid * 2,
+    padding: grid * 1.5,
     margin: `0 0 ${grid}px 0`,
     background: "black",
     color: "white",
@@ -442,7 +441,7 @@ const Home = (props) => {
                       <div
                         style={{
                           userSelect: "none",
-                          padding: "20px",
+                          padding: "15px",
                           margin: "0px 0px 10px",
                           background: "white",
                         }}
@@ -468,7 +467,7 @@ const Home = (props) => {
                       <div
                         style={{
                           userSelect: "none",
-                          padding: "20px",
+                          padding: "15px",
                           margin: "0px 0px 10px",
                           background: "white",
                         }}
