@@ -31,7 +31,7 @@ const Ratings = () => {
             }
           }
         });
-        setIsLoading(true); 
+        setIsLoading(true);
         data.sort(
           (a, b) =>
             calculateRating(b.ratings, data) - calculateRating(a.ratings, data)
@@ -166,7 +166,12 @@ const Ratings = () => {
                               />
                             )}
                             {!starsVisibility && (
-                              <span style={{ color: "red" }}>
+                              <span
+                                style={{
+                                  color: "#212529",
+                                  fontStyle: "italic",
+                                }}
+                              >
                                 Rating visibility: Off
                               </span>
                             )}
@@ -185,10 +190,15 @@ const Ratings = () => {
                       )}
                     </td>
                     <td>
-                      {user.canRate &&
-                        `${calculateRating(user.ratings, users)} (Rated by ${
-                          Object.keys(user.ratings).length
-                        })`}
+                      {user.canRate && (
+                        <>
+                          {calculateRating(user.ratings, users)}
+                          <span className="rated-by">
+                            {" "}
+                            Rated by ({Object.keys(user.ratings).length})
+                          </span>
+                        </>
+                      )}
                       {!user.canRate && "N/A"}
                     </td>
 
