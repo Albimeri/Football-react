@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import { generateId } from "./CommonHelpers";
-import { hoursEnum } from "../constants/enums";
+import { generateId, handleOnKeyDownNumeric } from "./CommonHelpers";
+import { hoursEnum, Status, Role, Companies } from "../constants/enums";
 import firebase from "firebase";
 import moment from "moment";
 
@@ -15,10 +15,47 @@ const Admin = () => {
   const [matchPlayers, setMatchPlayers] = useState(20);
   const [role, setRole] = useState(1);
   const [rating, setRating] = useState(5);
-  const [playerName, setPlayerName] = useState("");
+  const [player, setPlayer] = useState({ name: "", lastName: "" });
+  const [playerRole, setPlayerRole] = useState(Role.Player);
   const db = firebase.firestore();
 
   const updatePlayerNumber = () => {};
+
+  const roles = [
+    {
+      description: "Player",
+      key: 1,
+    },
+    {
+      description: "Goal Keeper",
+      key: 2,
+    },
+  ];
+
+  const savePlayer = () => { 
+    if (player.name.trim().length === 0 || rating > 10 || rating < 0) {
+      return;
+    }
+    const id = generateId();
+    db.collection("users")
+      .doc(id)
+      .set({
+        status: Status.IN,
+        time: moment().format("MM-DD-YYYY hh:mm:ss:SSS A"),
+        id,
+        name: player.name,
+        lastName: player.lastName,
+        secretId: Companies.SOLABORATE,
+        ratings: {},
+        role: playerRole,
+      })
+      .then(() => {
+        console.log("Status successfully set!");
+      })
+      .catch((error) => {
+        console.error("Error setting status: ", error);
+      });
+  };
 
   // currentUser.uid --- my id
 
@@ -84,11 +121,29 @@ const Admin = () => {
         <h4>Add Player</h4>
         <div className="flex admin-section">
           <div>
-            <span>Player</span>
+            <span> First name</span>
             <input
               placeholder="Write player name..."
-              onChange={(event) => setPlayerName(event.target.value)}
-              value={playerName}
+              onChange={(event) =>
+                setPlayer((prevState) => ({
+                  ...prevState,
+                  name: event.target.value,
+                }))
+              }
+              value={player.name}
+            />
+          </div>
+          <div>
+            <span> Last name</span>
+            <input
+              placeholder="Write player last name..."
+              onChange={(event) =>
+                setPlayer((prevState) => ({
+                  ...prevState,
+                  lastName: event.target.value,
+                }))
+              }
+              value={player.lastName}
             />
           </div>
           <div>
@@ -98,26 +153,27 @@ const Admin = () => {
                 setRole(+event.target.value);
               }}
             >
-              {hoursEnum.map((hour) => (
-                <option value={hour.key}>{hour.description}</option>
+              {roles.map((role) => (
+                <option value={role.key}>{role.description}</option>
               ))}
             </select>
           </div>
 
           <div>
             <span>Rating</span>
-            <select
-              onChange={(event) => {
-                setRating(+event.target.value);
-              }}
-            >
-              {hoursEnum.map((hour) => (
-                <option value={hour.key}>{hour.description}</option>
-              ))}
-            </select>
+            <input
+              maxLength={2}
+              placeholder="Rating"
+              type="number"
+              min="0"
+              onKeyDown={handleOnKeyDownNumeric}
+              onChange={(event) => setRating(+event.target.value)}
+            />
           </div>
         </div>
-        <button className="btn btn-success mt-md-3">Save Player</button>
+        <button className="btn btn-success mt-md-3" onClick={savePlayer}>
+          Save Player
+        </button>
       </section>
     </div>
   );

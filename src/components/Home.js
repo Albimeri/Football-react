@@ -252,6 +252,15 @@ const Home = (props) => {
     ...draggableStyle,
   });
 
+  const getItemStyleBlack = (isDragging, draggableStyle) => ({
+    userSelect: "none",
+    padding: grid * 2,
+    margin: `0 0 ${grid}px 0`,
+    background: "black",
+    color: "white",
+    ...draggableStyle,
+  });
+
   const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? "lightblue" : "#ededed",
     padding: grid,
@@ -523,7 +532,7 @@ const Home = (props) => {
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    style={getItemStyle(
+                                    style={getItemStyleBlack(
                                       snapshot.isDragging,
                                       provided.draggableProps.style
                                     )}
