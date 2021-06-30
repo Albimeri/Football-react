@@ -31,12 +31,13 @@ const Ratings = () => {
             }
           }
         });
-        setIsLoading(true);
+        setIsLoading(true); 
         data.sort(
           (a, b) =>
             calculateRating(b.ratings, data) - calculateRating(a.ratings, data)
         );
-        setUsers(data);
+        const filteredData = data.filter((item) => item.email);
+        setUsers(filteredData);
         setIsLoading(false);
       });
     return () => {

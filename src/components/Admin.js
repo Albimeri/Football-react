@@ -13,10 +13,9 @@ const Admin = () => {
   const [matchDay, setMatchDay] = useState(2);
   const [matchFiled, setMatchFiled] = useState(null);
   const [matchPlayers, setMatchPlayers] = useState(20);
-  const [role, setRole] = useState(1);
+  const [role, setRole] = useState(Role.Player);
   const [rating, setRating] = useState(5);
   const [player, setPlayer] = useState({ name: "", lastName: "" });
-  const [playerRole, setPlayerRole] = useState(Role.Player);
   const db = firebase.firestore();
 
   const updatePlayerNumber = () => {};
@@ -32,7 +31,8 @@ const Admin = () => {
     },
   ];
 
-  const savePlayer = () => { 
+  const savePlayer = () => {
+    debugger;
     if (player.name.trim().length === 0 || rating > 10 || rating < 0) {
       return;
     }
@@ -46,8 +46,8 @@ const Admin = () => {
         name: player.name,
         lastName: player.lastName,
         secretId: Companies.SOLABORATE,
-        ratings: {},
-        role: playerRole,
+        ratings: { [currentUser.uid]: rating },
+        role,
       })
       .then(() => {
         console.log("Status successfully set!");
