@@ -59,14 +59,19 @@ const Header = () => {
         >
           Home
         </a>
-        <a className="navbar-brand" onClick={() => history.push("/user-info")}>
-          User Info
-        </a>
         <a
           className={`navbar-brand${pathname === "/ratings" ? " active" : ""}`}
           onClick={() => history.push("/ratings")}
         >
           Ratings
+        </a>
+        <a
+          className={`navbar-brand${
+            pathname === "/user-info" ? " active" : ""
+          }`}
+          onClick={() => history.push("/user-info")}
+        >
+          User Info
         </a>
         {isAdmin && (
           <a
