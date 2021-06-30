@@ -66,7 +66,10 @@ const Home = (props) => {
             items.push(doc.data());
           }
         });
-
+        if (items.length === 0) {
+          setTeams({ team1: [], team2: [] });
+          return;
+        }
         const team1 = items.filter((item) => item.team === 1);
         const team2 = items.filter((item) => item.team === 2);
         team1.sort(
@@ -592,7 +595,7 @@ const Home = (props) => {
               </div>
             </div>
           )}
-          {isAdmin && (
+          {isAdmin && teams.team1.length > 0 && (
             <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
               <div>
                 <button
