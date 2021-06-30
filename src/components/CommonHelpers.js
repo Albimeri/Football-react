@@ -19,17 +19,27 @@ export const handleOnKeyDownNumeric = (event) => {
   }
 };
 
+export const calculateRatingInPlayers = (ratings) => {
+  let sum = 0;
+  const ratingsArr = Object.values(ratings);
+  ratingsArr.forEach((item) => { 
+    sum += item;
+  });
+  let result = ratingsArr.length === 0 ? 0 : sum / ratingsArr.length;
+  return parseFloat(result.toFixed(2));
+};
+
 export const calculateRating = (ratings, users) => {
   let sum = 0;
   const ratingsArr = Object.values(ratings);
-  const whoCanRate = getPriviledgedUsers(users).map((player) => player.id); 
+  const whoCanRate = getPriviledgedUsers(users).map((player) => player.id);
   whoCanRate.forEach((item) => {
     if (ratings[item]) {
       sum += ratings[item];
     }
   });
-  let result = ratingsArr.length === 0 ? 0 : sum / ratingsArr.length; 
-  return parseFloat(result.toFixed(2))
+  let result = ratingsArr.length === 0 ? 0 : sum / ratingsArr.length;
+  return parseFloat(result.toFixed(2));
 };
 
 export const getPriviledgedUsers = (users) => {

@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import {
-  generateId,
-  calculateRating,
-  getPriviledgedUsers,
-} from "./CommonHelpers";
+import { calculateRating, calculateRatingInPlayers } from "./CommonHelpers";
 import firebase from "firebase";
 import moment from "moment";
 import { Status, Role, Companies } from "../constants/enums";
@@ -59,6 +55,7 @@ const Home = (props) => {
         const filtered = users.filter((item) => item.status !== Status.NOT_SET);
         filtered.sort((a, b) => moment(a.time) - moment(b.time));
         setplayersWithStatus(filtered);
+        debugger;
         setUsers(users);
       });
     const unsubscribeTeams = db
@@ -70,11 +67,30 @@ const Home = (props) => {
             items.push(doc.data());
           }
         });
-        const teams = {
-          team1: items.filter((item) => item.team === 1),
-          team2: items.filter((item) => item.team === 2),
-        };
-        setTeams(teams);
+
+        const team1 = items.filter((item) => item.team === 1);
+        const team2 = items.filter((item) => item.team === 2);
+        team1.sort(
+          (a, b) =>
+            calculateRatingInPlayers(b.ratings) -
+            calculateRatingInPlayers(a.ratings)
+        );
+        team2.sort(
+          (a, b) =>
+            calculateRatingInPlayers(b.ratings) -
+            calculateRatingInPlayers(a.ratings)
+        );
+        const goalKeeperIndex1 = team1.findIndex(
+          (item) => item.role === Role.GoalKeeper
+        );
+        const goalKeeperIndex2 = team2.findIndex(
+          (item) => item.role === Role.GoalKeeper
+        );
+        const [goalKeeper1] = team1.splice(goalKeeperIndex1, 1);
+        const [goalKeeper2] = team2.splice(goalKeeperIndex2, 1);
+        team1.splice(0, 0, goalKeeper1);
+        team2.splice(0, 0, goalKeeper2);
+        setTeams({ team1, team2 });
       });
     const unsubscribeAdmins = db
       .collection("users")
@@ -148,9 +164,10 @@ const Home = (props) => {
     goalKeepers.forEach((goalKeeper, index) => {
       let team = (index + 1) % 2 === 0 ? 1 : 2;
       goalKeeper.team = team;
-      team === 1 ? team1.push(goalKeeper) : team2.push(goalKeeper);
+      team === 1
+        ? team1.splice(0, 0, goalKeeper)
+        : team2.splice(0, 0, goalKeeper);
     });
-
     setTeams({ team1, team2 });
   };
 
@@ -409,7 +426,7 @@ const Home = (props) => {
 
           {!isAdmin && (teams.team1.length > 0 || teams.team2.length > 0) && (
             <div className="col-lg-6 mx-auto">
-              <div class="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center not-admin-teams">
+              <div className="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center not-admin-teams">
                 <div>
                   <h3>Team white</h3>
                   <div
@@ -468,7 +485,7 @@ const Home = (props) => {
 
           {isAdmin && (teams.team1.length > 0 || teams.team2.length > 0) && (
             <div className="col-lg-6 mx-auto">
-              <div class="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center admin-teams">
+              <div className="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center admin-teams">
                 <div style={{ display: "flex" }}>
                   <DragDropContext onDragEnd={onDragEnd}>
                     <div>
@@ -569,8 +586,8 @@ const Home = (props) => {
                   ).length
                 }
               </h4>
-              <div class="table-responsive">
-                <table class="table table-striped table-sm home-table">
+              <div className="table-responsive">
+                <table className="table table-striped table-sm home-table">
                   <thead>
                     <tr>
                       <th scope="col">No.</th>
