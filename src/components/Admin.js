@@ -26,7 +26,7 @@ const Admin = () => {
       key: 1,
     },
     {
-      description: "Goal Keeper",
+      description: "Goalkeeper",
       key: 2,
     },
   ];

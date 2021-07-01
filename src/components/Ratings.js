@@ -136,7 +136,7 @@ const Ratings = () => {
                     <td>
                       {user.role !== Role.GoalKeeper
                         ? `${user.primaryPosition}/${user.secondaryPosition}`
-                        : "Goal Keeper"}
+                        : "Goalkeeper"}
                     </td>
                     <td
                       className="rating-stars"
@@ -220,7 +220,7 @@ const Ratings = () => {
                   </tr>
                 ))}
               <h4 style={{ marginBottom: "30px", marginTop: "30px" }}>
-                Goal Keepers
+                Goalkeepers
               </h4>
               {users
                 .filter((item) => item.role === Role.GoalKeeper)
@@ -231,7 +231,7 @@ const Ratings = () => {
                     <td>
                       {user.role !== Role.GoalKeeper
                         ? `${user.primaryPosition}/${user.secondaryPosition}`
-                        : "Goal Keeper"}
+                        : "Goalkeeper"}
                     </td>
                     <td
                       className="rating-stars"
