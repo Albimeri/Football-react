@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
-import { generateId } from "./CommonHelpers";
 import firebase from "firebase";
-import moment from "moment";
-import { Status, Role } from "../constants/enums";
 
 const Header = () => {
   const history = useHistory();
@@ -15,12 +12,13 @@ const Header = () => {
 
   useEffect(() => {
     fetchAdmins();
+    fetchUsers();
   }, []);
 
   const { pathname } = history.location;
 
   const fetchAdmins = async () => {
-    const unsubscribeOrders = db
+    const unsubscribeAdmins = db
       .collection("users")
       .where("isAdmin", "==", true)
       .onSnapshot((querySnapshot) => {
@@ -34,7 +32,26 @@ const Header = () => {
         setIsAdmin(admins.some((item) => item.id === currentUser.uid));
       });
     return () => {
-      unsubscribeOrders();
+      unsubscribeAdmins();
+    };
+  };
+
+  const fetchUsers = async () => {
+    const unsubscribeUsers = db
+      .collection("users")
+      .onSnapshot((querySnapshot) => {
+        let userData = {};
+        querySnapshot.forEach((doc) => {
+          if (doc.exists) {
+            const userData = doc.data();
+            if (userData.id === currentUser.uid && !userData.primaryPosition) {
+              history.push("/user-info");
+            }
+          }
+        });
+      });
+    return () => {
+      unsubscribeUsers();
     };
   };
 

@@ -10,13 +10,18 @@ const UserInfo = () => {
   const { currentUser } = useAuth();
   const [myUserInfo, setMyUserInfo] = useState(null);
   const [selectedRole, setRole] = useState(1);
-  const [primaryPosition, setPrimaryPosition] = useState("CB");
-  const [secondaryPosition, setSecondayPosition] = useState("CM");
+  const [primaryPosition, setPrimaryPosition] = useState("");
+  const [secondaryPosition, setSecondayPosition] = useState("");
   const db = firebase.firestore();
 
   // currentUser.uid --- my id
 
   const positions = [
+    {
+      role: "",
+      description: "",
+      key: 0,
+    },
     {
       role: "CB",
       description: "Center Back",
@@ -114,10 +119,9 @@ const UserInfo = () => {
             const user = doc.data();
             if (user.id === currentUser.uid) {
               setMyUserInfo(user);
-              if (user.primaryPosition) {
+              if (user.primaryPosition || user.secondaryPosition) {
                 setPrimaryPosition(user.primaryPosition);
                 setSecondayPosition(user.secondaryPosition);
-
                 setRole(user.role);
               }
             }
@@ -184,7 +188,10 @@ const UserInfo = () => {
                         <option
                           selected={primaryPosition === position.role}
                           value={position.role}
-                        >{`${position.description} (${position.role})`}</option>
+                        >
+                          {position.description}{" "}
+                          {position.role ? `(${position.role})` : position.role}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -199,7 +206,10 @@ const UserInfo = () => {
                         <option
                           selected={secondaryPosition === position.role}
                           value={position.role}
-                        >{`${position.description} (${position.role})`}</option>
+                        >
+                          {position.description}{" "}
+                          {position.role ? `(${position.role})` : position.role}
+                        </option>
                       ))}
                     </select>
                   </div>

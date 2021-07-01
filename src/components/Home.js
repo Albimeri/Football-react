@@ -10,7 +10,6 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 const Home = (props) => {
   const [error, setError] = useState("");
   const [myUserInfo, setMyUserInfo] = useState(null);
-  const [role, setRole] = useState(Role.Player);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [playersWithStatus, setplayersWithStatus] = useState([]);
   const [users, setUsers] = useState([]);
@@ -332,6 +331,10 @@ const Home = (props) => {
   };
 
   const setMyStatus = (status) => {
+    if (!myUserInfo.primaryPosition) {
+      histroy.push("/user-info");
+      return;
+    }
     db.collection("users")
       .doc(myUserInfo.id)
       .set({
@@ -398,18 +401,8 @@ const Home = (props) => {
       {currentUser.emailVerified && (
         <>
           <div className="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
-            <h2> Next match at (21:00 Wednesday)</h2>
-            <h3>Location: Fusha 2 Korriku</h3>
+            <h3>Location: Fusha 2 Korriku (21:00 Wednesday)</h3>
             <h4>What is your status?</h4>
-            <h5> Select your role:</h5>
-            <select
-              onChange={(event) => {
-                setRole(+event.target.value);
-              }}
-            >
-              <option value={Role.Player}>Player</option>
-              <option value={Role.GoalKeeper}>Goal Keeper</option>
-            </select>
             <div>
               <button
                 className="btn btn btn-outline-success"
@@ -677,9 +670,9 @@ const Home = (props) => {
                             )}
                           </td>
                           <td>
-                            {player.role === Role.Player
-                              ? "Player"
-                              : "Goalkeeper"}
+                            {player.role !== Role.Player
+                              ? "Goalkeeper"
+                              : `${player.primaryPosition}/${player.secondaryPosition}`}
                           </td>
                           <td>{player.time}</td>
                         </tr>
@@ -724,9 +717,9 @@ const Home = (props) => {
                             )}
                           </td>
                           <td>
-                            {player.role === Role.Player
-                              ? "Player"
-                              : "Goalkeeper"}
+                            {player.role !== Role.Player
+                              ? "Goalkeeper"
+                              : `${player.primaryPosition}/${player.secondaryPosition}`}
                           </td>
                           <td>{player.time}</td>
                         </tr>

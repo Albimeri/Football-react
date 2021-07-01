@@ -31,7 +31,7 @@ const App = () => {
             className="text-center text-white fixed-bottom "
             style={{ backgroundColor: "#212529" }}
           >
-            <div className="text-center p-3">
+            <div className="text-center p-3" id="footer">
               <a onClick={openLink} className="text-white cursor-pointer">
                 © 2021 Powered by Alb Imeri. Design by Orion Krasniqi
               </a>

@@ -118,7 +118,7 @@ select {
 }
 
 main {
-  height: calc(100vh - 115px);
+  height: calc(100vh - 105px);
   overflow: auto;
   padding: 30px 0;
 }
@@ -275,4 +275,8 @@ tbody tr.out {
   .admin-section-wrapper:last-of-type {
     margin-top: 30px;
   }
+}
+
+#footer {
+  padding: 10px!important;
 }
