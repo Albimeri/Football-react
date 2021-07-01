@@ -117,7 +117,7 @@ const UserInfo = () => {
               if (user.primaryPosition) {
                 setPrimaryPosition(user.primaryPosition);
                 setSecondayPosition(user.secondaryPosition);
-                debugger;
+
                 setRole(user.role);
               }
             }
@@ -206,19 +206,20 @@ const UserInfo = () => {
                 </>
               )}
             </div>
+            <div>
+              <button
+                type="button"
+                className="btn btn-success"
+                onClick={saveMyInfo}
+                style={{ margin: "15px 0" }}
+              >
+                Save my info
+              </button>
+            </div>
             <div className="flex admin-section">
-              <div>
-                <button
-                  type="button"
-                  className="btn btn-success"
-                  onClick={saveMyInfo}
-                >
-                  Save my info
-                </button>
-              </div>
-              <div>
-                <h3>A sample of soccer positions</h3>
-                <img src="../../../football.png"></img>
+              <div className="txt-center width-100">
+                <h4>A sample of soccer positions</h4>
+                <img src="../../../football.png" alt="positions" />
               </div>
             </div>
           </section>
