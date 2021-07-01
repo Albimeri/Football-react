@@ -178,12 +178,12 @@ const Ratings = () => {
                         )}
                       {(!user.canRate || !myUserInfo.canRate) &&
                         user.id !== currentUser.uid && (
-                          <span style={{ color: "red", fontWeight: "600" }}>
+                          <span style={{ color: "red" }}>
                             This user can not be rated yet!
                           </span>
                         )}
                       {user.id === currentUser.uid && (
-                        <span style={{ color: "red", fontWeight: "600" }}>
+                        <span style={{ color: "red" }}>
                           You cannot rate yourself!
                         </span>
                       )}
@@ -214,9 +214,7 @@ const Ratings = () => {
                         </div>
                       )}
                       {!user.canRate && !myUserInfo.isAdmin && (
-                        <span style={{ color: "red", fontWeight: "600" }}>
-                          Cannot rate yet!
-                        </span>
+                        <span style={{ color: "red" }}>Cannot rate yet!</span>
                       )}
                     </td>
                   </tr>
@@ -306,9 +304,7 @@ const Ratings = () => {
                         </div>
                       )}
                       {!user.canRate && !myUserInfo.isAdmin && (
-                        <span style={{ color: "red", fontWeight: "600" }}>
-                          Cannot rate yet!
-                        </span>
+                        <span style={{ color: "red" }}>Cannot rate yet!</span>
                       )}
                     </td>
                   </tr>
