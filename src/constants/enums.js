@@ -14,7 +14,7 @@ export const Companies = {
   MAYUNE: "mayune",
 };
 
-export const KeyCodes = {
+export const keyCodes = {
   MINUS: 189,
   NUMPAD_SUBTRACT: 109,
   NUMPAD_ADD: 107,
@@ -87,6 +87,11 @@ export const fieldsEnum = [
     description: "Sopa",
     key: 5,
   },
+  {
+    coordinations: "42.56307580688146, 21.1268960180655",
+    description: "2 Korriku",
+    key: 6,
+  },
 ];
 
 export const daysEnum = [
@@ -119,5 +124,3 @@ export const daysEnum = [
     key: 7,
   },
 ];
-
-

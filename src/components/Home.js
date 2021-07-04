@@ -4,7 +4,14 @@ import { useAuth } from "../contexts/AuthContext";
 import { calculateRating, calculateRatingInPlayers } from "./CommonHelpers";
 import firebase from "firebase";
 import moment from "moment";
-import { Status, Role, Companies } from "../constants/enums";
+import {
+  Status,
+  Role,
+  Companies,
+  fieldsEnum,
+  daysEnum,
+  hoursEnum,
+} from "../constants/enums";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const Home = (props) => {
@@ -14,6 +21,7 @@ const Home = (props) => {
   const [playersWithStatus, setplayersWithStatus] = useState([]);
   const [users, setUsers] = useState([]);
   const [isAdmin, setIsAdmin] = useState([]);
+  const [matchSettings, setMatchSettings] = useState(null);
   const [teams, setTeams] = useState({
     team1: [],
     team2: [],
@@ -106,10 +114,20 @@ const Home = (props) => {
         });
         setIsAdmin(admins.some((item) => item.id === currentUser.uid));
       });
+    const unsubscribeSettings = db
+      .collection("settings")
+      .doc("general")
+      .get()
+      .then((docRef) => {
+        const settings = docRef.data();
+        setMatchSettings(settings);
+      });
+
     return () => {
       unsubscribeUsers();
       unsubscribeTeams();
       unsubscribeAdmins();
+      unsubscribeSettings();
     };
   };
 
@@ -335,6 +353,9 @@ const Home = (props) => {
       histroy.push("/user-info");
       return;
     }
+    if (myUserInfo.status === status) {
+      return;
+    }
     db.collection("users")
       .doc(myUserInfo.id)
       .set({
@@ -366,6 +387,18 @@ const Home = (props) => {
           console.error("Error setting status: ", error);
         });
     }
+  };
+
+  const getMatchField = () => {
+    return fieldsEnum.find((field) => field.key === matchSettings.matchField);
+  };
+
+  const getMatchHour = () => {
+    return hoursEnum.find((hour) => hour.key === matchSettings.matchHour);
+  };
+
+  const getMatchDay = () => {
+    return daysEnum.find((day) => day.key === matchSettings.matchDay);
   };
 
   return (
@@ -401,16 +434,26 @@ const Home = (props) => {
       {currentUser.emailVerified && (
         <>
           <div className="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
-            <h3>Location: Fusha 2 Korriku (21:00 Wednesday)</h3>
+            <h3>
+              Location:{" "}
+              {matchSettings && (
+                <>
+                  {getMatchField().description} ({getMatchHour().description}{" "}
+                  {getMatchDay().description})
+                </>
+              )}
+            </h3>
             <h4>What is your status?</h4>
             <div>
               <button
+                disabled={myUserInfo?.status === Status.IN}
                 className="btn btn btn-outline-success"
                 onClick={() => setMyStatus(Status.IN)}
               >
                 IN
               </button>
               <button
+                disabled={myUserInfo?.status === Status.OUT}
                 className="btn btn btn-outline-danger"
                 onClick={() => setMyStatus(Status.OUT)}
               >
