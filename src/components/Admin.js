@@ -64,6 +64,8 @@ const Admin = () => {
         secretId: Companies.SOLABORATE,
         ratings: { [currentUser.uid]: rating },
         role,
+        primaryPosition: player.primaryPosition,
+        secondaryPosition: player.secondaryPosition,
       })
       .then(() => {
         console.log("Status successfully set!");
@@ -214,14 +216,14 @@ const Admin = () => {
                   onChange={(event) =>
                     setPlayer((prevState) => ({
                       ...prevState,
-                      primaryPostition: event.target.value,
+                      primaryPosition: event.target.value,
                     }))
                   }
                 >
                   {positions.map((position) => (
                     <option
-                      selected={player.secondaryPosition === position.role}
-                      value={position.key}
+                      selected={player.primaryPosition === position.role}
+                      value={position.role}
                     >
                       {position.description}
                     </option>
@@ -241,7 +243,7 @@ const Admin = () => {
                   {positions.map((position) => (
                     <option
                       selected={player.secondaryPosition === position.role}
-                      value={position.key}
+                      value={position.role}
                     >
                       {position.description}
                     </option>
