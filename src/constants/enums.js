@@ -124,3 +124,81 @@ export const daysEnum = [
     key: 7,
   },
 ];
+
+export const positions = [
+  {
+    role: "",
+    description: "",
+    key: 0,
+  },
+  {
+    role: "CB",
+    description: "Center Back",
+    key: 1,
+  },
+  {
+    role: "LB",
+    description: "Left Back",
+    key: 2,
+  },
+  {
+    role: "RB",
+    description: "Right Back",
+    key: 3,
+  },
+  {
+    role: "RWB",
+    description: "Left Wing Back",
+    key: 32,
+  },
+  {
+    role: "RWB",
+    description: "Right Wing Back",
+    key: 31,
+  },
+  {
+    role: "DM",
+    description: "Defensive Midfielder",
+    key: 4,
+  },
+  {
+    role: "CM",
+    description: "Center Midfielder",
+    key: 5,
+  },
+  {
+    role: "LM",
+    description: "Left Midfielder",
+    key: 6,
+  },
+  {
+    role: "RM",
+    description: "Right Midfielder",
+    key: 7,
+  },
+  {
+    role: "LW",
+    description: "Left Wing",
+    key: 8,
+  },
+  {
+    role: "RW",
+    description: "Right Wing",
+    key: 9,
+  },
+  {
+    role: "AM",
+    description: "Attacker Midfielder",
+    key: 10,
+  },
+  {
+    role: "SS",
+    description: "Second Striker",
+    key: 11,
+  },
+  {
+    role: "CF",
+    description: "Center Forward",
+    key: 11,
+  },
+];

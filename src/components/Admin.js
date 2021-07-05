@@ -9,6 +9,7 @@ import {
   Companies,
   fieldsEnum,
   daysEnum,
+  positions,
 } from "../constants/enums";
 import firebase from "firebase";
 import moment from "moment";
@@ -204,6 +205,46 @@ const Admin = () => {
                 >
                   {roles.map((role) => (
                     <option value={role.key}>{role.description}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <span>Primary Position</span>
+                <select
+                  onChange={(event) =>
+                    setPlayer((prevState) => ({
+                      ...prevState,
+                      primaryPostition: event.target.value,
+                    }))
+                  }
+                >
+                  {positions.map((position) => (
+                    <option
+                      selected={player.secondaryPosition === position.role}
+                      value={position.key}
+                    >
+                      {position.description}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <span>Secondary Position</span>
+                <select
+                  onChange={(event) =>
+                    setPlayer((prevState) => ({
+                      ...prevState,
+                      secondaryPosition: event.target.value,
+                    }))
+                  }
+                >
+                  {positions.map((position) => (
+                    <option
+                      selected={player.secondaryPosition === position.role}
+                      value={position.key}
+                    >
+                      {position.description}
+                    </option>
                   ))}
                 </select>
               </div>

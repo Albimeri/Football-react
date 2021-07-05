@@ -401,6 +401,18 @@ const Home = (props) => {
     return daysEnum.find((day) => day.key === matchSettings.matchDay);
   };
 
+  const removePlayer = (playerId) => {
+    db.collection("users")
+      .doc(playerId)
+      .delete()
+      .then(() => {
+        console.log("Player successfully deleted!");
+      })
+      .catch((error) => {
+        console.error("Error deleting player: ", error);
+      });
+  };
+
   return (
     <div className="container">
       {!currentUser.emailVerified && (
@@ -764,7 +776,22 @@ const Home = (props) => {
                               ? "Goalkeeper"
                               : `${player.primaryPosition}/${player.secondaryPosition}`}
                           </td>
-                          <td>{player.time}</td>
+                          <td className="flex">
+                            {player.time}
+                            {!player.email && (
+                              <button
+                                onClick={() => removePlayer(player.id)}
+                                className={"btn btn-outline-danger"}
+                                style={{
+                                  marginLeft: "5px",
+                                  fontSize: "12px",
+                                  width: "75px",
+                                }}
+                              >
+                                Remove
+                              </button>
+                            )}
+                          </td>
                         </tr>
                       ))}
                   </tbody>
