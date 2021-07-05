@@ -69,7 +69,7 @@ const Header = () => {
       className="navbar navbar-expand-md navbar-dark bg-dark  "
       style={{ height: "60px" }}
     >
-      <div className="container">
+      <div className={`container${isAdmin ? " admin-header" : ""}`}>
         <a
           className={`navbar-brand${pathname === "/" ? " active" : ""}`}
           onClick={() => history.push("/")}
