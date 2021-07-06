@@ -778,7 +778,7 @@ const Home = (props) => {
                           </td>
                           <td className="flex">
                             {player.time}
-                            {!player.email && (
+                            {!player.email && isAdmin && (
                               <button
                                 onClick={() => removePlayer(player.id)}
                                 className={"btn btn-outline-danger"}
