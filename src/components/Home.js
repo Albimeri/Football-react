@@ -11,6 +11,8 @@ import {
   fieldsEnum,
   daysEnum,
   hoursEnum,
+  positionTypes,
+  positions,
 } from "../constants/enums";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -413,6 +415,43 @@ const Home = (props) => {
       });
   };
 
+  const getRole = (primaryPosition, isWhite) => {
+    const role = positions.find(
+      (position) => position.role === primaryPosition
+    );
+    if (!role) {
+      return;
+    }
+    debugger;
+    if (role.type === positionTypes.DEFENDER) {
+      return (
+        <img
+          style={{ height: "20px", width: "20px", background: "white" }}
+          src="../../../def-white.png"
+          alt="positions"
+        />
+      );
+    }
+    if (role.type === positionTypes.MIDFIELDER) {
+      return (
+        <img
+          style={{ height: "20px", width: "20px", background: "white" }}
+          src="../../../mid-white.png"
+          alt="positions"
+        />
+      );
+    }
+    if (role.type === positionTypes.ATTACKER) {
+      return (
+        <img
+          style={{ height: "20px", width: "20px", background: "white" }}
+          src="../../../attack-white.png"
+          alt="positions"
+        />
+      );
+    }
+  };
+
   return (
     <div className="container">
       {!currentUser.emailVerified && (
@@ -574,13 +613,13 @@ const Home = (props) => {
                                        item.primaryPosition
                                          ? `(${item.primaryPosition}/${item.secondaryPosition})`
                                          : ""
-                                     } 
-                                  
+                                     }  
                                     ${
                                       item.role === Role.GoalKeeper
                                         ? "(GK)"
                                         : ""
                                     }`}
+                                    {getRole(item.primaryPosition)}
                                   </div>
                                 )}
                               </Draggable>
@@ -629,6 +668,7 @@ const Home = (props) => {
                                         ? "(GK)"
                                         : ""
                                     }`}
+                                    {getRole(item.primaryPosition)}
                                   </div>
                                 )}
                               </Draggable>
