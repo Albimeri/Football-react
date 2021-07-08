@@ -351,7 +351,6 @@ const Home = (props) => {
   };
 
   const setMyStatus = (status) => {
-    debugger;
     if (myUserInfo.role === Role.Player && !myUserInfo.primaryPosition) {
       histroy.push("/user-info");
       return;
@@ -517,7 +516,10 @@ const Home = (props) => {
             <div className="col-lg-6 mx-auto">
               <div className="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center not-admin-teams">
                 <div>
-                  <h3>Team white</h3>
+                  <h3>
+                    Team white - Avg.{" "}
+                    {parseFloat(getTeamAverage(teams.team1, users).toFixed(2))}
+                  </h3>
                   <div style={getListStyle()}>
                     {teams.team1.map((item) => (
                       <div
@@ -539,7 +541,10 @@ const Home = (props) => {
                   </div>
                 </div>
                 <div>
-                  <h3>Team Black</h3>
+                  <h3>
+                    Team Black - Avg.{" "}
+                    {parseFloat(getTeamAverage(teams.team2, users).toFixed(2))}
+                  </h3>
                   <div style={getListStyle()}>
                     {teams.team2.map((item) => (
                       <div
@@ -571,7 +576,12 @@ const Home = (props) => {
                 <div style={{ display: "flex" }}>
                   <DragDropContext onDragEnd={onDragEnd}>
                     <div>
-                      <h3>Team White</h3>
+                      <h3>
+                        Team White - Avg.{" "}
+                        {parseFloat(
+                          getTeamAverage(teams.team1, users).toFixed(2)
+                        )}
+                      </h3>
                       <Droppable droppableId="team1">
                         {(provided, snapshot) => (
                           <div
@@ -611,7 +621,12 @@ const Home = (props) => {
                     </div>
 
                     <div>
-                      <h3>Team Black</h3>
+                      <h3>
+                        Team Black - Avg.{" "}
+                        {parseFloat(
+                          getTeamAverage(teams.team2, users).toFixed(2)
+                        )}
+                      </h3>
                       <Droppable droppableId="team2">
                         {(provided, snapshot) => (
                           <div
