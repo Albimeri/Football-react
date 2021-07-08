@@ -829,7 +829,6 @@ const Home = (props) => {
                     <tr>
                       <th scope="col">No.</th>
                       <th scope="col">Player</th>
-                      <th scope="col">Status</th>
                       <th scope="col">Role</th>
                       <th scope="col">Time</th>
                     </tr>
@@ -845,14 +844,8 @@ const Home = (props) => {
                         <tr
                           className={player.status === Status.IN ? "in" : "out"}
                         >
-                          <th scope="row">{index + 1}</th>
-                          <td className="player-name">
-                            {`${player.name} ${player.lastName}`}
-                          </td>
                           <td className="flex">
-                            <div style={{ width: "35px" }}>
-                              {player.status === Status.IN ? "IN" : "OUT"}
-                            </div>
+                            <div style={{ width: "35px" }}>{index + 1}</div>
                             {isAdmin && player.id && (
                               <button
                                 style={{
@@ -878,6 +871,10 @@ const Home = (props) => {
                               </button>
                             )}
                           </td>
+                          <td className="player-name">
+                            {`${player.name} ${player.lastName}`}
+                          </td>
+
                           <td>
                             {player.role !== Role.Player
                               ? "Goalkeeper"
