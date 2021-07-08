@@ -300,7 +300,7 @@ const Home = (props) => {
   });
 
   const getListStyle = (isDraggingOver) => ({
-    background: isDraggingOver ? "lightblue" : "#ededed",
+    background: isDraggingOver ? "black" : "#ededed",
     padding: grid,
     width: 350,
     minHeight: 94,
@@ -420,7 +420,7 @@ const Home = (props) => {
       (position) => position.role === primaryPosition
     );
     if (!role) {
-      return;
+      return "";
     }
     debugger;
     if (role.type === positionTypes.DEFENDER) {
@@ -518,15 +518,7 @@ const Home = (props) => {
               <div className="d-grid gap-2 d-sm-flex my-md-3 justify-content-sm-center not-admin-teams">
                 <div>
                   <h3>Team white</h3>
-                  <div
-                    style={{
-                      background: "rgb(237, 237, 237)",
-                      padding: "10px",
-                      width: "250px",
-                      minHeight: "94px",
-                      margin: "10px",
-                    }}
-                  >
+                  <div style={getListStyle()}>
                     {teams.team1.map((item) => (
                       <div
                         style={{
@@ -538,38 +530,33 @@ const Home = (props) => {
                       >
                         {`${item.name} ${item.lastName} `}
                         {calculateRating(item.ratings, users)}
-                        {item.primaryPosition
-                          ? `(${item.primaryPosition}/${item.secondaryPosition})`
-                          : ""}
+                        {item.role === Role.GoalKeeper
+                          ? " (GK)"
+                          : ` (${item.primaryPosition}/${item.secondaryPosition})`}
+                        {getRole(item.primaryPosition)}
                       </div>
                     ))}
                   </div>
                 </div>
                 <div>
                   <h3>Team Black</h3>
-                  <div
-                    style={{
-                      background: "rgb(24 5 5)",
-                      padding: "10px",
-                      width: "250px",
-                      minHeight: "94px",
-                      margin: "10px",
-                    }}
-                  >
+                  <div style={getListStyle()}>
                     {teams.team2.map((item) => (
                       <div
                         style={{
                           userSelect: "none",
                           padding: "15px",
                           margin: "0px 0px 10px",
-                          background: "white",
+                          background: "black",
+                          color: "white",
                         }}
                       >
                         {`${item.name} ${item.lastName} `}
                         {calculateRating(item.ratings, users)}
-                        {item.primaryPosition
-                          ? `(${item.primaryPosition}/${item.secondaryPosition})`
-                          : ""}
+                        {item.role === Role.GoalKeeper
+                          ? " (GK)"
+                          : ` (${item.primaryPosition}/${item.secondaryPosition})`}
+                        {getRole(item.primaryPosition)}
                       </div>
                     ))}
                   </div>
@@ -607,18 +594,11 @@ const Home = (props) => {
                                       provided.draggableProps.style
                                     )}
                                   >
-                                    {`${item.name} ${item.lastName}  
-                                      ${calculateRating(item.ratings, users)} 
-                                     ${
-                                       item.primaryPosition
-                                         ? `(${item.primaryPosition}/${item.secondaryPosition})`
-                                         : ""
-                                     }  
-                                    ${
-                                      item.role === Role.GoalKeeper
-                                        ? "(GK)"
-                                        : ""
-                                    }`}
+                                    {`${item.name} ${item.lastName} `}
+                                    {calculateRating(item.ratings, users)}
+                                    {item.role === Role.GoalKeeper
+                                      ? " (GK)"
+                                      : ` (${item.primaryPosition}/${item.secondaryPosition})`}
                                     {getRole(item.primaryPosition)}
                                   </div>
                                 )}
@@ -654,20 +634,11 @@ const Home = (props) => {
                                       provided.draggableProps.style
                                     )}
                                   >
-                                    {`${item.name} 
-                                    ${item.lastName}
-                                    ${calculateRating(item.ratings, users)} 
-                                    ${
-                                      item.primaryPosition
-                                        ? `(${item.primaryPosition}/${item.secondaryPosition})`
-                                        : ""
-                                    } 
-                                   
-                                    ${
-                                      item.role === Role.GoalKeeper
-                                        ? "(GK)"
-                                        : ""
-                                    }`}
+                                    {`${item.name} ${item.lastName} `}
+                                    {calculateRating(item.ratings, users)}
+                                    {item.role === Role.GoalKeeper
+                                      ? " (GK)"
+                                      : ` (${item.primaryPosition}/${item.secondaryPosition})`}
                                     {getRole(item.primaryPosition)}
                                   </div>
                                 )}
