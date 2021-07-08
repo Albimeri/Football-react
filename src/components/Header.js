@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "firebase";
+import { Role } from "../constants/enums";
 
 const Header = () => {
   const history = useHistory();
@@ -44,7 +45,11 @@ const Header = () => {
         querySnapshot.forEach((doc) => {
           if (doc.exists) {
             const userData = doc.data();
-            if (userData.id === currentUser.uid && !userData.primaryPosition) {
+            if (
+              userData.id === currentUser.uid &&
+              !userData.primaryPosition &&
+              userData.role === Role.Player
+            ) {
               history.push("/user-info");
             }
           }

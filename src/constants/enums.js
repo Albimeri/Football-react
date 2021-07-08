@@ -6,7 +6,7 @@ export const Status = {
 
 export const Role = {
   Player: 1,
-  GoalKeeper: 2,
+  Goalkeeper: 2,
 };
 
 export const Companies = {

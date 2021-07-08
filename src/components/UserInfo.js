@@ -20,7 +20,7 @@ const UserInfo = () => {
       key: 1,
     },
     {
-      description: "GoalKeeper",
+      description: "Goalkeeper",
       key: 2,
     },
   ];
@@ -56,6 +56,12 @@ const UserInfo = () => {
   };
 
   const saveMyInfo = () => {
+    if (
+      selectedRole === Role.Player &&
+      (!primaryPosition || !secondaryPosition)
+    ) {
+      return;
+    } 
     db.collection("users")
       .doc(myUserInfo.id)
       .set({

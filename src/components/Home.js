@@ -91,16 +91,16 @@ const Home = (props) => {
             calculateRatingInPlayers(b.ratings) -
             calculateRatingInPlayers(a.ratings)
         );
-        const goalKeeperIndex1 = team1.findIndex(
-          (item) => item.role === Role.GoalKeeper
+        const GoalkeeperIndex1 = team1.findIndex(
+          (item) => item.role === Role.Goalkeeper
         );
-        const goalKeeperIndex2 = team2.findIndex(
-          (item) => item.role === Role.GoalKeeper
+        const GoalkeeperIndex2 = team2.findIndex(
+          (item) => item.role === Role.Goalkeeper
         );
-        const [goalKeeper1] = team1.splice(goalKeeperIndex1, 1);
-        const [goalKeeper2] = team2.splice(goalKeeperIndex2, 1);
-        team1.splice(0, 0, goalKeeper1);
-        team2.splice(0, 0, goalKeeper2);
+        const [Goalkeeper1] = team1.splice(GoalkeeperIndex1, 1);
+        const [Goalkeeper2] = team2.splice(GoalkeeperIndex2, 1);
+        team1.splice(0, 0, Goalkeeper1);
+        team2.splice(0, 0, Goalkeeper2);
         setTeams({ team1, team2 });
       });
     const unsubscribeAdmins = db
@@ -158,8 +158,8 @@ const Home = (props) => {
     let players = playersWithStatus.filter(
       (player) => player.role === Role.Player && player.status === Status.IN
     );
-    let goalKeepers = playersWithStatus.filter(
-      (player) => player.role === Role.GoalKeeper && player.status === Status.IN
+    let Goalkeepers = playersWithStatus.filter(
+      (player) => player.role === Role.Goalkeeper && player.status === Status.IN
     );
     let limitedPlayersNumber = 20;
     players = players.splice(
@@ -168,7 +168,7 @@ const Home = (props) => {
         ? limitedPlayersNumber
         : players.length
     );
-    goalKeepers.sort((a, b) => {
+    Goalkeepers.sort((a, b) => {
       let average1 = calculateRating(a.ratings, users);
       let average2 = calculateRating(b.ratings, users);
       return average1 < average2 ? 1 : -1;
@@ -182,12 +182,12 @@ const Home = (props) => {
     );
     const { team1, team2 } = seperatePlayers(players);
 
-    goalKeepers.forEach((goalKeeper, index) => {
+    Goalkeepers.forEach((Goalkeeper, index) => {
       let team = (index + 1) % 2 === 0 ? 1 : 2;
-      goalKeeper.team = team;
+      Goalkeeper.team = team;
       team === 1
-        ? team1.splice(0, 0, goalKeeper)
-        : team2.splice(0, 0, goalKeeper);
+        ? team1.splice(0, 0, Goalkeeper)
+        : team2.splice(0, 0, Goalkeeper);
     });
     setTeams({ team1, team2 });
   };
@@ -351,7 +351,8 @@ const Home = (props) => {
   };
 
   const setMyStatus = (status) => {
-    if (!myUserInfo.primaryPosition) {
+    debugger;
+    if (myUserInfo.role === Role.Player && !myUserInfo.primaryPosition) {
       histroy.push("/user-info");
       return;
     }
@@ -422,7 +423,6 @@ const Home = (props) => {
     if (!role) {
       return "";
     }
-    debugger;
     if (role.type === positionTypes.DEFENDER) {
       return (
         <img
@@ -530,7 +530,7 @@ const Home = (props) => {
                       >
                         {`${item.name} ${item.lastName} `}
                         {calculateRating(item.ratings, users)}
-                        {item.role === Role.GoalKeeper
+                        {item.role === Role.Goalkeeper
                           ? " (GK)"
                           : ` (${item.primaryPosition}/${item.secondaryPosition})`}
                         {getRole(item.primaryPosition)}
@@ -553,7 +553,7 @@ const Home = (props) => {
                       >
                         {`${item.name} ${item.lastName} `}
                         {calculateRating(item.ratings, users)}
-                        {item.role === Role.GoalKeeper
+                        {item.role === Role.Goalkeeper
                           ? " (GK)"
                           : ` (${item.primaryPosition}/${item.secondaryPosition})`}
                         {getRole(item.primaryPosition)}
@@ -596,7 +596,7 @@ const Home = (props) => {
                                   >
                                     {`${item.name} ${item.lastName} `}
                                     {calculateRating(item.ratings, users)}
-                                    {item.role === Role.GoalKeeper
+                                    {item.role === Role.Goalkeeper
                                       ? " (GK)"
                                       : ` (${item.primaryPosition}/${item.secondaryPosition})`}
                                     {getRole(item.primaryPosition)}
@@ -636,7 +636,7 @@ const Home = (props) => {
                                   >
                                     {`${item.name} ${item.lastName} `}
                                     {calculateRating(item.ratings, users)}
-                                    {item.role === Role.GoalKeeper
+                                    {item.role === Role.Goalkeeper
                                       ? " (GK)"
                                       : ` (${item.primaryPosition}/${item.secondaryPosition})`}
                                     {getRole(item.primaryPosition)}
@@ -674,7 +674,8 @@ const Home = (props) => {
               </div>
             </div>
           )}
-          {playersWithStatus.length > 0 && (
+          {playersWithStatus.filter((user) => user.status === Status.IN)
+            .length > 0 && (
             <>
               <h4 style={{ textAlign: "center", marginBottom: "30px" }}>
                 In Players:{" "}
@@ -690,26 +691,23 @@ const Home = (props) => {
                     <tr>
                       <th scope="col">No.</th>
                       <th scope="col">Player</th>
-                      <th scope="col">Status</th>
                       <th scope="col">Role</th>
                       <th scope="col">Time</th>
                     </tr>
                   </thead>
                   <tbody>
                     {playersWithStatus
-                      .filter((item) => item.role === Role.GoalKeeper)
+                      .filter(
+                        (user) =>
+                          user.status === Status.IN &&
+                          user.role === Role.Goalkeeper
+                      )
                       .map((player, index) => (
                         <tr
                           className={player.status === Status.IN ? "in" : "out"}
                         >
-                          <th scope="row">{index + 1}</th>
-                          <td className="player-name">
-                            {`${player.name} ${player.lastName}`}
-                          </td>
-                          <td className="flex">
-                            <div style={{ width: "35px" }}>
-                              {player.status === Status.IN ? "IN" : "OUT"}
-                            </div>
+                          <td className="player-name flex">
+                            <div style={{ width: "35px" }}>{index + 1}</div>
                             {isAdmin && player.id && (
                               <button
                                 style={{
@@ -735,6 +733,10 @@ const Home = (props) => {
                               </button>
                             )}
                           </td>
+                          <td scope="row">
+                            {" "}
+                            {`${player.name} ${player.lastName}`}
+                          </td>
                           <td>
                             {player.role !== Role.Player
                               ? "Goalkeeper"
@@ -744,7 +746,101 @@ const Home = (props) => {
                         </tr>
                       ))}
                     {playersWithStatus
-                      .filter((item) => item.role === Role.Player)
+                      .filter(
+                        (item) =>
+                          item.role === Role.Player && item.status === Status.IN
+                      )
+                      .map((player, index) => (
+                        <tr
+                          className={player.status === Status.IN ? "in" : "out"}
+                        >
+                          <td className="player-name flex">
+                            <div style={{ width: "35px" }}>{index + 1}</div>
+                            {isAdmin && player.id && (
+                              <button
+                                style={{
+                                  marginLeft: "5px",
+                                  fontSize: "12px",
+                                  width: "75px",
+                                }}
+                                className={`btn${
+                                  player.status === Status.IN
+                                    ? " btn-outline-danger"
+                                    : " btn-outline-success"
+                                }`}
+                                onClick={() =>
+                                  setToOut(
+                                    player,
+                                    player.status === Status.IN
+                                      ? Status.OUT
+                                      : Status.IN
+                                  )
+                                }
+                              >
+                                SET {player.status === Status.IN ? "OUT" : "IN"}
+                              </button>
+                            )}
+                          </td>
+                          <td className="player-name  ">
+                            {`${player.name} ${player.lastName}`}
+                          </td>
+                          <td>
+                            {player.role !== Role.Player
+                              ? "Goalkeeper"
+                              : `${player.primaryPosition}/${player.secondaryPosition}`}
+                          </td>
+                          <td className="flex">
+                            {player.time}
+                            {!player.email && isAdmin && (
+                              <button
+                                onClick={() => removePlayer(player.id)}
+                                className={"btn btn-outline-danger"}
+                                style={{
+                                  marginLeft: "5px",
+                                  fontSize: "12px",
+                                  width: "75px",
+                                }}
+                              >
+                                Remove
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
+          {playersWithStatus.filter((user) => user.status === Status.OUT)
+            .length > 0 && (
+            <>
+              <h4 style={{ textAlign: "center", marginBottom: "30px" }}>
+                Out Players:{" "}
+                {
+                  playersWithStatus.filter(
+                    (player) => player.status === Status.OUT
+                  ).length
+                }
+              </h4>
+              <div className="table-responsive">
+                <table className="table table-striped table-sm home-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">No.</th>
+                      <th scope="col">Player</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {playersWithStatus
+                      .filter(
+                        (user) =>
+                          user.status === Status.OUT &&
+                          user.role === Role.Player
+                      )
                       .map((player, index) => (
                         <tr
                           className={player.status === Status.IN ? "in" : "out"}

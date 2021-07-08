@@ -134,7 +134,7 @@ const Ratings = () => {
                     <th scope="row">{index + 1}</th>
                     <td>{`${user.name} ${user.lastName}`}</td>
                     <td>
-                      {user.role !== Role.GoalKeeper
+                      {user.role !== Role.Goalkeeper
                         ? `${user.primaryPosition}/${user.secondaryPosition}`
                         : "Goalkeeper"}
                     </td>
@@ -223,13 +223,13 @@ const Ratings = () => {
                 Goalkeepers
               </h4>
               {users
-                .filter((item) => item.role === Role.GoalKeeper)
+                .filter((item) => item.role === Role.Goalkeeper)
                 .map((user, index) => (
                   <tr>
                     <th scope="row">{index + 1}</th>
                     <td>{`${user.name} ${user.lastName}`}</td>
                     <td>
-                      {user.role !== Role.GoalKeeper
+                      {user.role !== Role.Goalkeeper
                         ? `${user.primaryPosition}/${user.secondaryPosition}`
                         : "Goalkeeper"}
                     </td>
