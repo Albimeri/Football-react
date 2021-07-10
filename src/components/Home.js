@@ -287,6 +287,9 @@ const Home = (props) => {
     padding: "15px",
     margin: `0 0 ${grid}px 0`,
     background: "white",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
     ...draggableStyle,
   });
 
@@ -296,6 +299,9 @@ const Home = (props) => {
     margin: `0 0 ${grid}px 0`,
     background: "black",
     color: "white",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
     ...draggableStyle,
   });
 
@@ -416,6 +422,7 @@ const Home = (props) => {
   };
 
   const getRole = (primaryPosition, isWhite) => {
+    console.log("123123", isWhite);
     const role = positions.find(
       (position) => position.role === primaryPosition
     );
@@ -425,8 +432,8 @@ const Home = (props) => {
     if (role.type === positionTypes.DEFENDER) {
       return (
         <img
-          style={{ height: "20px", width: "20px", background: "white" }}
-          src="../../../def-white.png"
+          style={{ height: "18px", marginLeft: "auto" }}
+          src={isWhite ? "../../../def-white.png" : "../../../def-black-bg.png"}
           alt="positions"
         />
       );
@@ -434,8 +441,8 @@ const Home = (props) => {
     if (role.type === positionTypes.MIDFIELDER) {
       return (
         <img
-          style={{ height: "20px", width: "20px", background: "white" }}
-          src="../../../mid-white.png"
+          style={{ height: "18px", marginLeft: "auto" }}
+          src={isWhite ? "../../../mid-white.png" : "../../../mid-black-bg.png"}
           alt="positions"
         />
       );
@@ -443,8 +450,12 @@ const Home = (props) => {
     if (role.type === positionTypes.ATTACKER) {
       return (
         <img
-          style={{ height: "20px", width: "20px", background: "white" }}
-          src="../../../attack-white.png"
+          style={{ height: "18px", marginLeft: "auto" }}
+          src={
+            isWhite
+              ? "../../../attack-white.png"
+              : "../../../attack-black-bg.png"
+          }
           alt="positions"
         />
       );
@@ -528,6 +539,9 @@ const Home = (props) => {
                           padding: "15px",
                           margin: "0px 0px 10px",
                           background: "white",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
                         }}
                       >
                         {`${item.name} ${item.lastName} `}
@@ -535,7 +549,7 @@ const Home = (props) => {
                         {item.role === Role.Goalkeeper
                           ? " (GK)"
                           : ` (${item.primaryPosition}/${item.secondaryPosition})`}
-                        {getRole(item.primaryPosition)}
+                        {getRole(item.primaryPosition, true)}
                       </div>
                     ))}
                   </div>
@@ -554,6 +568,9 @@ const Home = (props) => {
                           margin: "0px 0px 10px",
                           background: "black",
                           color: "white",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
                         }}
                       >
                         {`${item.name} ${item.lastName} `}
@@ -561,7 +578,7 @@ const Home = (props) => {
                         {item.role === Role.Goalkeeper
                           ? " (GK)"
                           : ` (${item.primaryPosition}/${item.secondaryPosition})`}
-                        {getRole(item.primaryPosition)}
+                        {getRole(item.primaryPosition, false)}
                       </div>
                     ))}
                   </div>
@@ -609,7 +626,7 @@ const Home = (props) => {
                                     {item.role === Role.Goalkeeper
                                       ? " (GK)"
                                       : ` (${item.primaryPosition}/${item.secondaryPosition})`}
-                                    {getRole(item.primaryPosition)}
+                                    {getRole(item.primaryPosition, true)}
                                   </div>
                                 )}
                               </Draggable>
@@ -654,7 +671,7 @@ const Home = (props) => {
                                     {item.role === Role.Goalkeeper
                                       ? " (GK)"
                                       : ` (${item.primaryPosition}/${item.secondaryPosition})`}
-                                    {getRole(item.primaryPosition)}
+                                    {getRole(item.primaryPosition, false)}
                                   </div>
                                 )}
                               </Draggable>
