@@ -22,7 +22,7 @@ export const handleOnKeyDownNumeric = (event) => {
 export const calculateRatingInPlayers = (ratings) => {
   let sum = 0;
   const ratingsArr = Object.values(ratings);
-  ratingsArr.forEach((item) => { 
+  ratingsArr.forEach((item) => {
     sum += item;
   });
   let result = ratingsArr.length === 0 ? 0 : sum / ratingsArr.length;
@@ -31,14 +31,16 @@ export const calculateRatingInPlayers = (ratings) => {
 
 export const calculateRating = (ratings, users) => {
   let sum = 0;
+  let validRaters = 0;
   const ratingsArr = Object.values(ratings);
   const whoCanRate = getPriviledgedUsers(users).map((player) => player.id);
   whoCanRate.forEach((item) => {
     if (ratings[item]) {
+      validRaters += 1;
       sum += ratings[item];
     }
   });
-  let result = ratingsArr.length === 0 ? 0 : sum / ratingsArr.length;
+  let result = ratingsArr.length === 0 ? 0 : sum / validRaters;
   return parseFloat(result.toFixed(2));
 };
 
