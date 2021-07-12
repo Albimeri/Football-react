@@ -89,11 +89,17 @@ const Ratings = () => {
       });
   };
 
-  const getMyRating = (ratings) => {
-    if (!ratings) {
-      return 0;
-    }
-    return ratings[currentUser.uid];
+  const getMyRatingsLength = (ratings) => {
+    const whoCanRate = users
+      .filter((item) => item.canRate)
+      .map((player) => player.id);
+    let validRaters = 0;
+    whoCanRate.forEach((item) => {
+      if (ratings[item]) {
+        validRaters += 1;
+      }
+    });
+    return validRaters;
   };
 
   return (
@@ -194,7 +200,7 @@ const Ratings = () => {
                           {calculateRating(user.ratings, users)}
                           <span className="rated-by">
                             {" "}
-                            Rated by ({Object.keys(user.ratings).length})
+                            Rated by ({getMyRatingsLength(user.ratings)})
                           </span>
                         </>
                       )}
