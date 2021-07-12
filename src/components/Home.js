@@ -687,7 +687,7 @@ const Home = (props) => {
             </div>
           )}
           {isAdmin && (
-            <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+            <div className="text-center init-teams">
               <div>
                 <button
                   className="btn btn btn-default"
