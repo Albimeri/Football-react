@@ -686,23 +686,34 @@ const Home = (props) => {
               </div>
             </div>
           )}
-          {isAdmin && teams.team1.length > 0 && (
+          {isAdmin && (
             <div className="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
               <div>
                 <button
-                  className="btn btn btn-danger"
+                  className="btn btn btn-default"
                   type="button"
-                  onClick={deleteTeams}
+                  onClick={initTeams}
                 >
-                  Delete Teams
+                  Init Teams
                 </button>
-                <button
-                  className="btn btn btn-success"
-                  type="button"
-                  onClick={saveTeams}
-                >
-                  Save Teams
-                </button>
+                {teams.team1.length > 0 && (
+                  <>
+                    <button
+                      className="btn btn btn-danger"
+                      type="button"
+                      onClick={deleteTeams}
+                    >
+                      Delete Teams
+                    </button>
+                    <button
+                      className="btn btn btn-success"
+                      type="button"
+                      onClick={saveTeams}
+                    >
+                      Save Teams
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           )}
@@ -945,13 +956,6 @@ const Home = (props) => {
                     onClick={updateplayersWithStatus}
                   >
                     Delete IN Players
-                  </button>
-                  <button
-                    className="btn btn btn-default"
-                    type="button"
-                    onClick={initTeams}
-                  >
-                    Init Teams
                   </button>
                 </div>
               )}
