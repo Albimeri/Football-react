@@ -69,6 +69,7 @@ const Admin = () => {
       })
       .then(() => {
         console.log("Status successfully set!");
+        setPlayer({ name: "", lastName: "" });
       })
       .catch((error) => {
         console.error("Error setting status: ", error);
@@ -110,7 +111,12 @@ const Admin = () => {
                   }}
                 >
                   {hoursEnum.map((hour) => (
-                    <option value={hour.key}>{hour.description}</option>
+                    <option
+                      selected={matchSettings.matchHour === hour.key}
+                      value={hour.key}
+                    >
+                      {hour.description}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -126,7 +132,12 @@ const Admin = () => {
                   }}
                 >
                   {daysEnum.map((day) => (
-                    <option value={day.key}>{day.description}</option>
+                    <option
+                      selected={matchSettings.matchDay === day.key}
+                      value={day.key}
+                    >
+                      {day.description}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -140,8 +151,13 @@ const Admin = () => {
                     }));
                   }}
                 >
-                  {fieldsEnum.map((hour) => (
-                    <option value={hour.key}>{hour.description}</option>
+                  {fieldsEnum.map((field) => (
+                    <option
+                      selected={matchSettings.matchField === field.key}
+                      value={field.key}
+                    >
+                      {field.description}
+                    </option>
                   ))}
                 </select>
               </div>
