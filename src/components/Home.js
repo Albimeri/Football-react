@@ -284,7 +284,7 @@ const Home = (props) => {
 
   const getItemStyle = (isDragging, draggableStyle) => ({
     userSelect: "none",
-    padding: "15px",
+    padding: "10px",
     margin: `0 0 ${grid}px 0`,
     background: "white",
     display: "flex",
@@ -295,7 +295,7 @@ const Home = (props) => {
 
   const getItemStyleBlack = (isDragging, draggableStyle) => ({
     userSelect: "none",
-    padding: "15px",
+    padding: "10px",
     margin: `0 0 ${grid}px 0`,
     background: "black",
     color: "white",
@@ -536,7 +536,7 @@ const Home = (props) => {
                       <div
                         style={{
                           userSelect: "none",
-                          padding: "15px",
+                          padding: "10px",
                           margin: "0px 0px 10px",
                           background: "white",
                           display: "flex",
@@ -564,7 +564,7 @@ const Home = (props) => {
                       <div
                         style={{
                           userSelect: "none",
-                          padding: "15px",
+                          padding: "10px",
                           margin: "0px 0px 10px",
                           background: "black",
                           color: "white",
