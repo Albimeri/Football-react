@@ -161,11 +161,10 @@ const Home = (props) => {
     let Goalkeepers = playersWithStatus.filter(
       (player) => player.role === Role.Goalkeeper && player.status === Status.IN
     );
-    let limitedPlayersNumber = 20;
     players = players.splice(
       0,
-      players.length > limitedPlayersNumber
-        ? limitedPlayersNumber
+      players.length > matchSettings.playersLimit
+        ? matchSettings.playersLimit
         : players.length
     );
     Goalkeepers.sort((a, b) => {
