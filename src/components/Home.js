@@ -135,10 +135,21 @@ const Home = (props) => {
 
   const saveTeams = () => {
     const batch = db.batch();
-    const list = teams.team1.concat(teams.team2);
-    list.forEach((item) => {
+    teams.team1.forEach((item, index) => {
       const toSetPlayer = db.collection("teams").doc(item.id);
-      batch.set(toSetPlayer, item);
+      batch.set(toSetPlayer, {
+        ...item,
+        x: 600 + index * 50,
+        y: 100 + index * 150,
+      });
+    });
+    teams.team2.forEach((item, index) => {
+      const toSetPlayer = db.collection("teams").doc(item.id);
+      batch.set(toSetPlayer, {
+        ...item,
+        x: 600 + index * 50,
+        y: 100 + index * 150,
+      });
     });
     batch.commit();
   };
