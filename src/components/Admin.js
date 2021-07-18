@@ -66,6 +66,7 @@ const Admin = () => {
         role,
         primaryPosition: player.primaryPosition,
         secondaryPosition: player.secondaryPosition,
+        canRate: true,
       })
       .then(() => {
         console.log("Status successfully set!");
