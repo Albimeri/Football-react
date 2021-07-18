@@ -27,11 +27,18 @@ body {
   background: #555;
 }
 
+nav.navbar {
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+  top: 0;
+}
+
 .navbar .container {
   justify-content: flex-start;
 }
 
-.navbar .container>button {
+.navbar .container > button {
   margin-left: auto;
 }
 
@@ -71,7 +78,9 @@ a {
   margin-bottom: 3em;
 }
 
-input:focus, button:focus, select:focus {
+input:focus,
+button:focus,
+select:focus {
   outline: none;
 }
 
@@ -105,7 +114,8 @@ select {
   font-size: 16px;
 }
 
-.table td, .table th {
+.table td,
+.table th {
   min-width: 100px;
 }
 
@@ -118,26 +128,36 @@ select {
 }
 
 main {
-  height: calc(100vh - 105px);
+  min-height: calc(100vh - 170px);
   overflow: auto;
-  padding: 30px 0;
+  margin-top: 80px;
+  margin-bottom: 30px;
+}
+
+footer {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .flex {
   display: flex;
 }
 
-.admin-section>div {
+.admin-section > div {
   flex: 1;
 }
 
-.admin-section select, .admin-section input {
+.admin-section select,
+.admin-section input {
   display: block;
   margin-top: 7px;
   width: calc(100% - 7px);
 }
 
-.navbar-brand.active, .navbar-brand.active:hover {
+.navbar-brand.active,
+.navbar-brand.active:hover {
   color: #007bff;
 }
 
@@ -177,7 +197,7 @@ tbody tr.out {
   color: red;
 }
 
-.admin-section>div>img {
+.admin-section > div > img {
   max-width: 100%;
 }
 
@@ -210,20 +230,27 @@ tbody tr.out {
       Max width before this PARTICULAR table gets nasty. This query will take effect for any screen smaller than 760px and also iPads specifically.
       */
 
-@media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
-  .admin-header>a {
+@media only screen and (max-width: 760px),
+  (min-device-width: 768px) and (max-device-width: 1024px) {
+  .admin-header > a {
     margin-right: 15px;
   }
-  .admin-header>button {
+  .admin-header > button {
     padding: 0;
     border: none;
     margin-left: 0 !important;
   }
-  .table td, .table th {
+  .table td,
+  .table th {
     font-size: 14px;
   }
   /* Force table to not be like tables anymore */
-  table:not(.home-table), table:not(.home-table) thead, table:not(.home-table) tbody, table:not(.home-table) th, table:not(.home-table) td, table:not(.home-table) tr {
+  table:not(.home-table),
+  table:not(.home-table) thead,
+  table:not(.home-table) tbody,
+  table:not(.home-table) th,
+  table:not(.home-table) td,
+  table:not(.home-table) tr {
     display: block;
   }
   /* Hide table headers (but not display: none;, for accessibility) */
@@ -238,14 +265,16 @@ tbody tr.out {
   table:not(.home-table) tr:nth-child(odd) {
     background: rgba(0, 0, 0, 0.05);
   }
-  table:not(.home-table) td, table:not(.home-table) tbody th {
+  table:not(.home-table) td,
+  table:not(.home-table) tbody th {
     /* Behave  like a "row" */
     border: none;
     border-bottom: 1px solid #eee;
     position: relative;
     padding-left: 50% !important;
   }
-  table:not(.home-table) td:before, table:not(.home-table) tbody th:before {
+  table:not(.home-table) td:before,
+  table:not(.home-table) tbody th:before {
     /* Now like a table header */
     position: absolute;
     /* Top/left values mimic padding */
@@ -262,7 +291,8 @@ tbody tr.out {
   table:not(.home-table) td.rating-stars {
     padding-left: 46% !important;
   }
-  .table.home-table td, .table.home-table th {
+  .table.home-table td,
+  .table.home-table th {
     min-width: initial;
   }
   /*
@@ -290,16 +320,19 @@ tbody tr.out {
   table.ratings-table .form-check-input {
     position: relative;
   }
-  .admin-teams>div, .not-admin-teams>div {
+  .admin-teams > div,
+  .not-admin-teams > div {
     flex-wrap: wrap;
     text-align: center;
   }
-  .admin-teams>div>div, .not-admin-teams>div>div {
+  .admin-teams > div > div,
+  .not-admin-teams > div > div {
     flex-basis: 100%;
     width: 100% !important;
     margin-bottom: 15px;
   }
-  .admin-teams>div>div>div, .not-admin-teams>div>div>div {
+  .admin-teams > div > div > div,
+  .not-admin-teams > div > div > div {
     width: 100% !important;
   }
   .pricing-header .btn {
@@ -309,7 +342,7 @@ tbody tr.out {
   .admin-section {
     flex-wrap: wrap;
   }
-  .admin-section>div {
+  .admin-section > div {
     flex-basis: 100%;
     margin-bottom: 15px;
   }
@@ -371,6 +404,7 @@ div p {
 
 .formation-container {
   height: 100%;
-  background: url(https://solchatcdn.azureedge.net/f9eb5664-09fc-443b-885a-b28d4cadbc08.jpg) no-repeat;
+  background: url(https://solchatcdn.azureedge.net/f9eb5664-09fc-443b-885a-b28d4cadbc08.jpg)
+    no-repeat;
   background-size: cover;
 }
