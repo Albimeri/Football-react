@@ -22,7 +22,7 @@ const Home = (props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [playersWithStatus, setplayersWithStatus] = useState([]);
   const [users, setUsers] = useState([]);
-  const [isAdmin, setIsAdmin] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [matchSettings, setMatchSettings] = useState(null);
   const [teams, setTeams] = useState({
     team1: [],
@@ -746,7 +746,11 @@ const Home = (props) => {
                       )
                       .map((player, index) => (
                         <tr
-                          className={player.status === Status.IN ? "in" : "out"}
+                          className={
+                            player.status === Status.IN && 2 > index
+                              ? "in"
+                              : "out"
+                          }
                         >
                           <td className="player-name flex">
                             <div style={{ width: "35px" }}>{index + 1}</div>
@@ -794,7 +798,12 @@ const Home = (props) => {
                       )
                       .map((player, index) => (
                         <tr
-                          className={player.status === Status.IN ? "in" : "out"}
+                          className={
+                            player.status === Status.IN &&
+                            matchSettings?.playersLimit > index
+                              ? "in"
+                              : "out"
+                          }
                         >
                           <td className="player-name flex">
                             <div style={{ width: "35px" }}>{index + 1}</div>
@@ -877,11 +886,7 @@ const Home = (props) => {
                   </thead>
                   <tbody>
                     {playersWithStatus
-                      .filter(
-                        (user) =>
-                          user.status === Status.OUT &&
-                          user.role === Role.Player
-                      )
+                      .filter((user) => user.status === Status.OUT)
                       .map((player, index) => (
                         <tr
                           className={player.status === Status.IN ? "in" : "out"}
