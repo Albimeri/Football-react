@@ -95,6 +95,14 @@ const Header = () => {
         >
           User Info
         </a>
+        <a
+          className={`navbar-brand${
+            pathname === "/formations" ? " active" : ""
+          }`}
+          onClick={() => history.push("/formations")}
+        >
+          Formations
+        </a>
         {isAdmin && (
           <a
             className={`navbar-brand${pathname === "/admin" ? " active" : ""}`}

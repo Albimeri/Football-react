@@ -342,3 +342,35 @@ tbody tr.out {
     margin-left: 33.33333%;
   }
 }
+
+.dragable-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  border-radius: 50%;
+  border: 1px solid black;
+  user-select: none;
+  overflow: hidden;
+  width: 30px;
+  height: 30px;
+  background: white;
+  color: black;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  text-align: center;
+}
+
+main p {
+  user-select: none;
+}
+
+div p {
+  font-size: 12px;
+}
+
+.formation-container {
+  height: 100%;
+  background: url(https://solchatcdn.azureedge.net/f9eb5664-09fc-443b-885a-b28d4cadbc08.jpg) no-repeat;
+  background-size: cover;
+}
