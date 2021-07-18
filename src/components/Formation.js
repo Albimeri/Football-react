@@ -3,7 +3,7 @@ import Draggable from "react-draggable";
 
 const Formation = () => {
   const players = [
-    { name: "Alb Imeri", x: "650", y: "300" },
+    { name: "Alb Imeri", x: 650, y: 300 },
     { name: "Edon Abdullahu", x: 350, y: 200 },
     { name: "Orion Krasniqi", x: 150, y: 100 },
   ];
@@ -14,18 +14,16 @@ const Formation = () => {
 
   return (
     <div className="formation-container">
-      {players.map((item) => (
-        <Draggable
-          onStop={(event, dragData) => handleDragStop(event, dragData)}
-        >
-          <div
-            style={{ transform: `translate(${item.x}px, ${item.y}px)` }}
-            className="dragable-item"
+      {players.map((item) => {
+        return (
+          <Draggable
+            defaultPosition={{ x: item.x, y: item.y }}
+            onStop={(event, dragData) => handleDragStop(event, dragData)}
           >
-            {item.name}
-          </div>
-        </Draggable>
-      ))}
+            <div className="dragable-item">{item.name}</div>
+          </Draggable>
+        );
+      })}
     </div>
   );
 };
