@@ -386,9 +386,8 @@ div p {
 }
 
 .formation-container {
-  height: 100%;
+  height: 100vh;
   background: url(https://solchatcdn.azureedge.net/f9eb5664-09fc-443b-885a-b28d4cadbc08.jpg) no-repeat;
   background-size: cover;
-  position: relative;
-  background-color: teal;
+  position: relative; 
 }
