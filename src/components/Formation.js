@@ -4,7 +4,6 @@ import { useAuth } from "../contexts/AuthContext";
 import Draggable from "react-draggable";
 import firebase from "firebase";
 import { calculateRatingInPlayers } from "./CommonHelpers";
-import { Role } from "../constants/enums";
 
 const Formation = () => {
   const [players, setPlayers] = useState([]);
@@ -68,52 +67,19 @@ const Formation = () => {
     };
   };
 
-  const handleDragStop = (event, dragData) => {
-    debugger;
-    // debugger;
-  };
-
-  const handleDrag = (event, dragable, item) => {
-    // setPlayers((prevState) => {
-    //   const selectedPlayer = item;
-    //   const foundIndex = prevState.findIndex((el) => el.id === item.id);
-    //   let [splicedPlayer] = prevState.splice(foundIndex, 1);
-    //   splicedPlayer = {
-    //     ...splicedPlayer,
-    //     x: dragable.x.toString(),
-    //     y: dragable.y.toString(),
-    //   };
-    //   prevState.push(splicedPlayer);
-    //   return prevState;
-    // });
-  };
-
-  const saveTeams = () => {
-    // const batch = db.batch();
-    // const list = teams.team1.concat(teams.team2);
-    // list.forEach((item) => {
-    //   const toSetPlayer = db.collection("teams").doc(item.id);
-    //   batch.set(toSetPlayer, item);
-    // });
-    // batch.commit();
-  };
-
   return (
     <div className="formation-container">
       <h1>{selectedDragable?.x}</h1>
-      {players
-        .filter((player) => player.role === Role.Player)
-        .map((item) => {
-          return (
-            <Draggable
-              key={item.name}
-              defaultPosition={{ x: item?.x, y: item?.y }}
-              onDrag={(event, dragable) => handleDrag(event, dragable, item)}
-            >
-              <div className="dragable-item">{item.name}</div>
-            </Draggable>
-          );
-        })}
+      {players.map((item) => {
+        return (
+          <Draggable
+            key={item.name}
+            defaultPosition={{ x: item?.x, y: item?.y }}
+          >
+            <div className="dragable-item">{item.name}</div>
+          </Draggable>
+        );
+      })}
     </div>
   );
 };

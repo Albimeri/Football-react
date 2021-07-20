@@ -156,6 +156,25 @@ const Home = (props) => {
           y: formation442[index].y,
         });
       });
+    const goalkeeper1 = teams.team1.find((el) => el.role === Role.Goalkeeper);
+    const goalkeeper2 = teams.team2.find((el) => el.role === Role.Goalkeeper);
+    if (goalkeeper1) {
+      const toSetPlayer = db.collection("teams").doc(goalkeeper1.id);
+      batch.set(toSetPlayer, {
+        ...goalkeeper1,
+        x: 575,
+        y: 550,
+      });
+    }
+    if (goalkeeper2) {
+      const toSetPlayer = db.collection("teams").doc(goalkeeper2.id);
+      batch.set(toSetPlayer, {
+        ...goalkeeper2,
+        x: 575,
+        y: 550,
+      });
+    }
+
     batch.commit();
   };
 
