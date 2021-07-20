@@ -135,6 +135,16 @@ const Home = (props) => {
   };
 
   const saveTeams = () => {
+    const list = teams.team1.concat(teams.team2);
+    if (list.length > 0) {
+      const deleteBatch = db.batch();
+      list.forEach((item) => {
+        const toDeletePlayer = db.collection("teams").doc(item.id);
+        deleteBatch.delete(toDeletePlayer, item);
+      });
+      deleteBatch.commit();
+    }
+
     const batch = db.batch();
     teams.team1
       .filter((el) => el.role === Role.Player)
@@ -174,7 +184,6 @@ const Home = (props) => {
         y: 550,
       });
     }
-
     batch.commit();
   };
 
