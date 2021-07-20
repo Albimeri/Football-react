@@ -76,7 +76,7 @@ const Formation = () => {
             key={item.name}
             defaultPosition={{ x: item?.x, y: item?.y }}
           >
-            <div className="dragable-item">{item.name}</div>
+            <div className="dragable-item">{`${item.name} ${item.lastName}`}</div>
           </Draggable>
         );
       })}
