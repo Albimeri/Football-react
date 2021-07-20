@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import Draggable from "react-draggable";
 import firebase from "firebase";
 import { calculateRatingInPlayers } from "./CommonHelpers";
+import { Role } from "../constants/enums";
 
 const Formation = () => {
   const [players, setPlayers] = useState([]);
@@ -73,18 +74,18 @@ const Formation = () => {
   };
 
   const handleDrag = (event, dragable, item) => {
-    setPlayers((prevState) => {
-      const selectedPlayer = item;
-      const foundIndex = prevState.findIndex((el) => el.id === item.id);
-      let [splicedPlayer] = prevState.splice(foundIndex, 1);
-      splicedPlayer = {
-        ...splicedPlayer,
-        x: dragable.x.toString(),
-        y: dragable.y.toString(),
-      };
-      prevState.push(splicedPlayer);
-      return prevState;
-    });
+    // setPlayers((prevState) => {
+    //   const selectedPlayer = item;
+    //   const foundIndex = prevState.findIndex((el) => el.id === item.id);
+    //   let [splicedPlayer] = prevState.splice(foundIndex, 1);
+    //   splicedPlayer = {
+    //     ...splicedPlayer,
+    //     x: dragable.x.toString(),
+    //     y: dragable.y.toString(),
+    //   };
+    //   prevState.push(splicedPlayer);
+    //   return prevState;
+    // });
   };
 
   const saveTeams = () => {
@@ -100,17 +101,19 @@ const Formation = () => {
   return (
     <div className="formation-container">
       <h1>{selectedDragable?.x}</h1>
-      {players.map((item) => {
-        return (
-          <Draggable
-            key={item.name}
-            defaultPosition={{ x: item?.x, y: item?.y }}
-            onStop={(event, dragable) => handleDrag(event, dragable, item)}
-          >
-            <div className="dragable-item">{item.name}</div>
-          </Draggable>
-        );
-      })}
+      {players
+        .filter((player) => player.role === Role.Player)
+        .map((item) => {
+          return (
+            <Draggable
+              key={item.name}
+              defaultPosition={{ x: item?.x, y: item?.y }}
+              onDrag={(event, dragable) => handleDrag(event, dragable, item)}
+            >
+              <div className="dragable-item">{item.name}</div>
+            </Draggable>
+          );
+        })}
     </div>
   );
 };

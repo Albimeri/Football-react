@@ -218,3 +218,18 @@ export const positions = [
     type: positionTypes.ATTACKER,
   },
 ];
+
+export const formation442 = [
+  { x: 500, y: 50 },
+  { x: 650, y: 50 },
+
+  { x: 350, y: 250 },
+  { x: 500, y: 250 },
+  { x: 650, y: 250 },
+  { x: 800, y: 250 },
+
+  { x: 350, y: 450 },
+  { x: 500, y: 450 },
+  { x: 650, y: 450 },
+  { x: 800, y: 450 },
+];

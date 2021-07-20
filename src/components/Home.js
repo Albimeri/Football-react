@@ -13,6 +13,7 @@ import {
   hoursEnum,
   positionTypes,
   positions,
+  formation442,
 } from "../constants/enums";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
@@ -135,22 +136,26 @@ const Home = (props) => {
 
   const saveTeams = () => {
     const batch = db.batch();
-    teams.team1.forEach((item, index) => {
-      const toSetPlayer = db.collection("teams").doc(item.id);
-      batch.set(toSetPlayer, {
-        ...item,
-        x: 600 + index * 50,
-        y: 100 + index * 150,
+    teams.team1
+      .filter((el) => el.role === Role.Player)
+      .forEach((item, index) => {
+        const toSetPlayer = db.collection("teams").doc(item.id);
+        batch.set(toSetPlayer, {
+          ...item,
+          x: formation442[index].x,
+          y: formation442[index].y,
+        });
       });
-    });
-    teams.team2.forEach((item, index) => {
-      const toSetPlayer = db.collection("teams").doc(item.id);
-      batch.set(toSetPlayer, {
-        ...item,
-        x: 600 + index * 50,
-        y: 100 + index * 150,
+    teams.team2
+      .filter((el) => el.role === Role.Player)
+      .forEach((item, index) => {
+        const toSetPlayer = db.collection("teams").doc(item.id);
+        batch.set(toSetPlayer, {
+          ...item,
+          x: formation442[index].x,
+          y: formation442[index].y,
+        });
       });
-    });
     batch.commit();
   };
 
