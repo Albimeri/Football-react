@@ -3,6 +3,7 @@ import { useHistory } from "react-router";
 import { useAuth } from "../contexts/AuthContext";
 import firebase from "firebase";
 import { Role } from "../constants/enums";
+import { isMobile } from "react-device-detect";
 
 const Header = () => {
   const history = useHistory();
@@ -95,7 +96,7 @@ const Header = () => {
         >
           User Info
         </a>
-        {isAdmin && (
+        {isAdmin && !isMobile && (
           <a
             className={`navbar-brand${
               pathname === "/formations" ? " active" : ""
