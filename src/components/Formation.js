@@ -12,7 +12,6 @@ const Formation = () => {
   const histroy = useHistory();
   const db = firebase.firestore();
   const [isAdmin, setIsAdmin] = useState(false);
-  const [selectedDragable, setSelectedDragable] = useState(null);
 
   useEffect(() => {
     fetchData();
@@ -69,7 +68,6 @@ const Formation = () => {
 
   return (
     <div className="formation-container">
-      <h1>{selectedDragable?.x}</h1>
       {players.map((item) => {
         return (
           <Draggable
