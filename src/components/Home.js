@@ -465,7 +465,6 @@ const Home = (props) => {
   };
 
   const getRole = (primaryPosition, isWhite) => {
-    console.log("123123", isWhite);
     const role = positions.find(
       (position) => position.role === primaryPosition
     );
