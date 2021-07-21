@@ -44,7 +44,6 @@ const Formation = () => {
             calculateRatingInPlayers(b.ratings) -
             calculateRatingInPlayers(a.ratings)
         );
-        debugger;
         setPlayers(team);
       });
     const unsubscribeAdmins = db
@@ -68,20 +67,34 @@ const Formation = () => {
   };
 
   return (
-    <div
-      className="formation-container"
-      style={{ backgroundImage: "url(../../../pitch.png)" }}
-    >
-      {players.map((item) => {
-        return (
-          <Draggable
-            key={item.name}
-            defaultPosition={{ x: item?.x, y: item?.y }}
-          >
-            <div className="dragable-item">{`${item.name} ${item.lastName}`}</div>
-          </Draggable>
-        );
-      })}
+    <div className="formation-wrapper">
+      <div
+        className="formation-container"
+        style={{ backgroundImage: "url(../../../pitch.png)" }}
+      >
+        {players.map((item) => {
+          return (
+            <Draggable
+              key={item.name}
+              defaultPosition={{ x: item?.x, y: item?.y }}
+            >
+              <div
+                className={`dragable-item ${
+                  item.team === 1 ? "white" : "black"
+                }`}
+                style={{
+                  backgroundImage: `url(../../../${
+                    item.team === 1 ? "white" : "black"
+                  }-shirt.png?v2)`,
+                }}
+              >
+                <p>{item.kitNumber}</p>
+                <p>{`${item.name.charAt(0)}. ${item.lastName}`}</p>
+              </div>
+            </Draggable>
+          );
+        })}
+      </div>
     </div>
   );
 };

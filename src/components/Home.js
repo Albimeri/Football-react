@@ -172,16 +172,16 @@ const Home = (props) => {
       const toSetPlayer = db.collection("teams").doc(goalkeeper1.id);
       batch.set(toSetPlayer, {
         ...goalkeeper1,
-        x: 575,
-        y: 550,
+        x: 160,
+        y: 450,
       });
     }
     if (goalkeeper2) {
       const toSetPlayer = db.collection("teams").doc(goalkeeper2.id);
       batch.set(toSetPlayer, {
         ...goalkeeper2,
-        x: 575,
-        y: 550,
+        x: 160,
+        y: 450,
       });
     }
     batch.commit();
