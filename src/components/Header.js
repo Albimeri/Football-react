@@ -96,7 +96,7 @@ const Header = () => {
         >
           User Info
         </a>
-        {isAdmin && !isMobile && (
+        {!isMobile && (
           <a
             className={`navbar-brand${
               pathname === "/formations" ? " active" : ""
