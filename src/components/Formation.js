@@ -44,6 +44,7 @@ const Formation = () => {
             calculateRatingInPlayers(b.ratings) -
             calculateRatingInPlayers(a.ratings)
         );
+        debugger;
         setPlayers(team);
       });
     const unsubscribeAdmins = db
@@ -67,7 +68,10 @@ const Formation = () => {
   };
 
   return (
-    <div className="formation-container">
+    <div
+      className="formation-container"
+      style={{ backgroundImage: "url(../../../pitch.png)" }}
+    >
       {players.map((item) => {
         return (
           <Draggable
