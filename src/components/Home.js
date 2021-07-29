@@ -187,14 +187,14 @@ const Home = (props) => {
     batch.commit();
   };
 
-  const hasRatedAtleast21 = () => {
+  const hasRatedAtleast15 = () => {
     let count = 0;
     users.forEach((user) => {
       if (user.ratings[myUserInfo.id]) {
         count++;
       }
     });
-    return myUserInfo.canRate ? count >= 21 : true;
+    return myUserInfo.canRate ? count >= 15 : true;
   };
 
   const deleteTeams = () => {
@@ -410,8 +410,8 @@ const Home = (props) => {
   };
 
   const setMyStatus = (status) => {
-    if (!hasRatedAtleast21()) {
-      alert("You need to rate at least 21 players that you played with!");
+    if (!hasRatedAtleast15()) {
+      alert("You need to rate at least 15 players that you played with!");
       return;
     }
     if (myUserInfo.role === Role.Player && !myUserInfo.primaryPosition) {
