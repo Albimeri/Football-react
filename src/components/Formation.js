@@ -80,7 +80,7 @@ const Formation = () => {
             >
               <div
                 className={`dragable-item ${
-                  item.team === 1 ? "white" : "black"
+                  item.team === 1 ? "white " : "black  "
                 }`}
                 style={{
                   backgroundImage: `url(../../../${
@@ -89,7 +89,11 @@ const Formation = () => {
                 }}
               >
                 <p>{item.kitNumber}</p>
-                <p>{`${item.name.charAt(0)}. ${item.lastName}`}</p>
+                <p
+                  className={
+                    item.team === 1 ? "color-white-jersy" : "color-black-jersy"
+                  }
+                >{`${item.name.charAt(0)}. ${item.lastName}`}</p>
               </div>
             </Draggable>
           );

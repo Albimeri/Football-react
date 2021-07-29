@@ -31,6 +31,7 @@ const Ratings = () => {
         setIsLoading(true);
         data.sort(
           (a, b) =>
+            b.canRate - a.canRate ||
             calculateRating(b.ratings, data) - calculateRating(a.ratings, data)
         );
         const filteredData = data.filter((item) => item.email);

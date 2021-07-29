@@ -173,7 +173,7 @@ const Home = (props) => {
       batch.set(toSetPlayer, {
         ...goalkeeper1,
         x: 160,
-        y: 450,
+        y: 460,
       });
     }
     if (goalkeeper2) {
@@ -181,10 +181,20 @@ const Home = (props) => {
       batch.set(toSetPlayer, {
         ...goalkeeper2,
         x: 160,
-        y: 450,
+        y: 460,
       });
     }
     batch.commit();
+  };
+
+  const hasRatedAtleast21 = () => {
+    let count = 0;
+    users.forEach((user) => {
+      if (user.ratings[myUserInfo.id]) {
+        count++;
+      }
+    });
+    return myUserInfo.canRate ? count >= 21 : true;
   };
 
   const deleteTeams = () => {
@@ -400,6 +410,10 @@ const Home = (props) => {
   };
 
   const setMyStatus = (status) => {
+    if (!hasRatedAtleast21()) {
+      alert("You need to rate at least 21 players that you played with!");
+      return;
+    }
     if (myUserInfo.role === Role.Player && !myUserInfo.primaryPosition) {
       histroy.push("/user-info");
       return;
