@@ -137,7 +137,7 @@ const Ratings = () => {
               {users
                 .filter((item) => item.role === Role.Player)
                 .map((user, index) => (
-                  <tr>
+                  <tr className={index < 5 ? "top3" : ""}>
                     <th scope="row">{index + 1}</th>
                     <td>{`${user.name} ${user.lastName}`}</td>
                     <td>

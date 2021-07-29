@@ -449,3 +449,15 @@ div p {
   background: #fff!important;
   color: black!important;
 }
+
+tr {
+  background-color: white!important;
+}
+
+.top3 {
+  background-color: #e4ecff!important;
+}
+
+.bottom3 {
+  background-color: #ffcacf!important;
+}
