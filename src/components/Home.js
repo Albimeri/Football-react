@@ -98,10 +98,14 @@ const Home = (props) => {
         const GoalkeeperIndex2 = team2.findIndex(
           (item) => item.role === Role.Goalkeeper
         );
-        const [Goalkeeper1] = team1.splice(GoalkeeperIndex1, 1);
-        const [Goalkeeper2] = team2.splice(GoalkeeperIndex2, 1);
-        team1.splice(0, 0, Goalkeeper1);
-        team2.splice(0, 0, Goalkeeper2);
+        if (GoalkeeperIndex1 !== -1) {
+          const [Goalkeeper1] = team1.splice(GoalkeeperIndex1, 1);
+          team1.splice(0, 0, Goalkeeper1);
+        }
+        if (GoalkeeperIndex2 !== -1) {
+          const [Goalkeeper2] = team2.splice(GoalkeeperIndex2, 1);
+          team2.splice(0, 0, Goalkeeper2);
+        }
         setTeams({ team1, team2 });
       });
     const unsubscribeAdmins = db
