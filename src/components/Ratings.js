@@ -103,6 +103,21 @@ const Ratings = () => {
     return validRaters;
   };
 
+  const toggleCanSetStatus = (user) => {
+    db.collection("users")
+      .doc(user.id)
+      .update({
+        ...user,
+        canSetStatus: !user.canSetStatus,
+      })
+      .then(() => {
+        console.log("Can set status successfully updated!");
+      })
+      .catch((error) => {
+        console.error("Error can set status: ", error);
+      });
+  };
+
   return (
     <>
       {users.length > 0 && (
@@ -131,6 +146,7 @@ const Ratings = () => {
                 <th scope="col">Rate</th>
                 <th scope="col">Rating</th>
                 <th scope="col">Can rate</th>
+                <th scope="col">Can set status</th>
               </tr>
             </thead>
             <tbody>
@@ -224,6 +240,19 @@ const Ratings = () => {
                         <span style={{ color: "red" }}>Cannot rate yet!</span>
                       )}
                     </td>
+                    {myUserInfo.isAdmin && (
+                      <td>
+                        <div className="form-check form-switch">
+                          <input
+                            checked={user.canSetStatus}
+                            onChange={() => toggleCanSetStatus(user)}
+                            className="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
               <h4 style={{ marginBottom: "30px", marginTop: "30px" }}>

@@ -57,6 +57,7 @@ const Home = (props) => {
           if (doc.exists) {
             const user = doc.data();
             if (user.id === currentUser.uid) {
+              debugger;
               setMyUserInfo(user);
             }
             users.push(doc.data());
@@ -552,7 +553,12 @@ const Home = (props) => {
           </>
         </div>
       )}
-      {currentUser.emailVerified && (
+      {currentUser.emailVerified && !myUserInfo?.canSetStatus && (
+        <div className="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
+          <h3>No game yet!</h3>
+        </div>
+      )}
+      {currentUser.emailVerified && myUserInfo?.canSetStatus && (
         <>
           <div className="pricing-header px-3 py-3 pb-md-4 mx-auto text-center">
             <h3>
