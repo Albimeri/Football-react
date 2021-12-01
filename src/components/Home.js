@@ -37,14 +37,25 @@ const Home = (props) => {
     fetchData();
   }, []);
 
-  const updateplayersWithStatus = () => {
+  const updatePlayersWithStatus = () => {
     const batch = db.batch();
     playersWithStatus.forEach((item) => {
       const toUpdatePlayer = db.collection("users").doc(item.id);
       batch.update(toUpdatePlayer, { status: Status.NOT_SET });
     });
     batch.commit();
+    deleteTemporaryUsers();
     deleteTeams();
+  };
+
+  const deleteTemporaryUsers = () => {
+    const batch = db.batch();
+    const tempUsers = users.filter((item) => !item.email);
+    tempUsers.forEach((item) => {
+      const toUpdatePlayer = db.collection("users").doc(item.id);
+      batch.delete(toUpdatePlayer, { status: Status.NOT_SET });
+    });
+    batch.commit();
   };
 
   const fetchData = async () => {
@@ -1024,7 +1035,7 @@ const Home = (props) => {
                   <button
                     className="btn btn btn-danger"
                     type="button"
-                    onClick={updateplayersWithStatus}
+                    onClick={updatePlayersWithStatus}
                   >
                     Delete IN Players
                   </button>
